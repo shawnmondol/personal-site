@@ -7,7 +7,7 @@ import Anthropic from '@anthropic-ai/sdk'
 
 const SYSTEM_PROMPT = `You are an expert resume parser.
 Extract structured information from the provided resume text and return ONLY a valid JSON object.
-Do not include any explanation, markdown, or code fences — just raw JSON.`
+Do not include any explanation, markdown, or code fences — just raw JSON. The response should start and end with curly braces.`
 
 const JSON_SCHEMA = `{
   "name": "string",
@@ -104,7 +104,7 @@ ${rawText}`
 //
 // ─────────────────────────────────────────────────────────────────────────────
 export async function parseResumeWithAI(rawText: string): Promise<ResumeData> {
-
+  console.log(rawText)
   const client = new Anthropic({ apiKey: import.meta.env.VITE_ANTHROPIC_API_KEY, dangerouslyAllowBrowser: true })
   const response = await client.messages.create({
     model: 'claude-opus-4-6',
@@ -113,6 +113,7 @@ export async function parseResumeWithAI(rawText: string): Promise<ResumeData> {
     messages: [{ role: 'user', content: buildUserMessage(rawText) }],
   })
   const text = response.content[0].type === 'text' ? response.content[0].text : ''
+  console.log(text)
   return JSON.parse(text) as ResumeData
 }
 
