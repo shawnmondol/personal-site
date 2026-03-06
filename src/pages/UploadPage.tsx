@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { extractPdfText } from '../lib/extractPdfText'
-import { parseResumeWithAI } from '../lib/parseResume'
+import { extractPdfText } from '../lib/resume/extractPdfText.ts'
+import { parseResumeWithAI } from '../lib/resume/parseResume.ts'
 import { useResume } from '../context/ResumeContext'
 
 type Status = 'idle' | 'extracting' | 'parsing' | 'error'
