@@ -1,12 +1,11 @@
 import { Link } from "react-router-dom"
-import { useAuth } from "../hooks/useAuth"
-import {login, logout} from '../lib/auth/signIn'
+import { useAuth } from "../context/AuthContext.tsx";
 import githubIcon from '/github.svg'
 import linkedinIcon from '/linkedin.png'
 import gitlabIcon from '/gitlab.svg'
 
 export function Header() {
-    const { user } = useAuth();
+    const { user, loading, login, logout } = useAuth();
     const links = [
         { label: 'GitHub', href: import.meta.env.VITE_GITHUB, image: githubIcon },
         { label: 'LinkedIn', href: import.meta.env.VITE_LINKEDIN, image: linkedinIcon },
@@ -36,7 +35,7 @@ export function Header() {
                     </div>
                 )}
                 <div>
-                    {!user ? (
+                    {loading ? null : !user ? (
                     <button
                         className="ml-4 px-4 py-2 bg-gray-800 hover:bg-blue-600 text-sm text-gray-300 hover:text-white cursor-pointer rounded-lg transition-colors"
                         onClick={login}

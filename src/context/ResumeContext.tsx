@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
-import type { ResumeData } from '../types/resume'
+import type { ResumeData } from '../types/Resume.ts'
 
 const STORAGE_KEY = 'resume_data'
 

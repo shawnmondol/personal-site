@@ -1,4 +1,4 @@
-import type { Experience } from '../../types/resume'
+import type { Experience } from '../../types/Resume.ts'
 
 interface Props {
   experience: Experience[]

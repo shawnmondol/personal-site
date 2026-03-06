@@ -1,4 +1,4 @@
-import type { ResumeData } from '../../types/resume.ts'
+import type { ResumeData } from '../../types/Resume.ts'
 import Anthropic from '@anthropic-ai/sdk'
 
 // ─────────────────────────────────────────────────────────────────────────────

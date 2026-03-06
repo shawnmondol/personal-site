@@ -1,4 +1,4 @@
-import type { Project } from '../../types/resume'
+import type { Project } from '../../types/Resume.ts'
 
 interface Props {
   projects: Project[]
