@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom"
-import { useAuth } from "../context/AuthContext.tsx";
+import {UserMenu} from "./UserMenu.tsx"
+import { useAuth } from "../context/AuthContext.tsx"
 import githubIcon from '/github.svg'
 import linkedinIcon from '/linkedin.png'
 import gitlabIcon from '/gitlab.svg'
@@ -43,12 +44,8 @@ export function Header() {
                         Sign In
                     </button>
                     ) :
-                    <button
-                        className="ml-4 px-4 py-2 bg-gray-800 hover:bg-blue-600 text-sm text-gray-300 hover:text-white cursor-pointer rounded-lg transition-colors"
-                        onClick={logout}
-                    >
-                        Logout
-                    </button>}
+                    <UserMenu user={user} logout={logout}/>
+                    }
                 </div>
             </div>
         </header>
