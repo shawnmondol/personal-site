@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { ResumeProvider, useResume } from './context/ResumeContext'
 import { UploadPage } from './pages/UploadPage'
 import { ResumePage } from './pages/ResumePage'
+import {Header} from "./components/Header.tsx";
 
 function AppRoutes() {
   const { resume } = useResume()
@@ -18,9 +19,10 @@ function AppRoutes() {
 function App() {
   return (
     <BrowserRouter>
-      <ResumeProvider>
-        <AppRoutes />
-      </ResumeProvider>
+        <Header />
+            <ResumeProvider>
+                <AppRoutes />
+            </ResumeProvider>
     </BrowserRouter>
   )
 }

@@ -10,11 +10,9 @@ interface Props {
 export function HeroSection({ name, title, summary, contact }: Props) {
   const links = [
     contact.email && { label: contact.email, href: `mailto:${contact.email}` },
-    contact.github && { label: 'GitHub', href: contact.github },
-    contact.linkedin && { label: 'LinkedIn', href: contact.linkedin },
-    contact.website && { label: 'Website', href: contact.website },
+    import.meta.env.GITHUB && { label: 'GitHub', href: import.meta.env.GITHUB },
+    import.meta.env.LINKEDIN && { label: 'LinkedIn', href: import.meta.env.LINKEDIN },
   ].filter(Boolean) as { label: string; href: string }[]
-
   return (
     <section className="bg-gray-900 text-white py-20 px-6">
       <div className="max-w-3xl mx-auto">
