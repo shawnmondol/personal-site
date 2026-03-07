@@ -1,8 +1,8 @@
-import { useState, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { extractPdfText } from '../services/resume/extractPdfText.ts'
-import { parseResumeWithAI } from '../services/resume/parseResume.ts'
-import { useResume } from '../context/ResumeContext'
+import {useRef, useState} from 'react'
+import {useNavigate} from 'react-router-dom'
+import {extractPdfText} from '../services/resume/extractPdfText.ts'
+import {parseResumeWithAI} from '../services/resume/parseResume.ts'
+import {useResume} from '../context/ResumeContext'
 
 type Status = 'idle' | 'extracting' | 'parsing' | 'error'
 
@@ -27,7 +27,7 @@ export function UploadPage() {
 
       setStatus('parsing')
       const resumeData = await parseResumeWithAI(rawText)
-
+      resumeData.guid = crypto.randomUUID()
       setResume(resumeData)
       navigate('/resume')
     } catch (err) {

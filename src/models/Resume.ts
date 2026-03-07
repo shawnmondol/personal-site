@@ -34,6 +34,7 @@ export interface Project {
 }
 
 export interface ResumeData {
+  guid: string
   name: string
   title: string
   summary: string
