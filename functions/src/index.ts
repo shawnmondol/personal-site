@@ -94,7 +94,7 @@ ${rawText}`
 
 const client = new Anthropic({apiKey: process.env.ANTHROPIC_API_KEY})
 
-export const parseResume = onCall(async (request) => {
+export const parseResume = onCall({cors: true}, async (request) => {
     const {rawText} = request.data
 
     if (!rawText) throw new HttpsError('invalid-argument', 'rawText is required')
