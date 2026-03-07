@@ -7,6 +7,7 @@ export async function login() {
 }
 
 export async function logout() {
+    console.log("Logging out...");
     await signOut(auth)
 }
 
