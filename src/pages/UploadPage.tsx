@@ -26,9 +26,8 @@ export function UploadPage() {
       const rawText = await extractPdfText(file)
 
       setStatus('parsing')
-      const resumeData = await parseResumeWithAI(rawText)
-      resumeData.guid = crypto.randomUUID()
-      setResume(resumeData)
+      const resumeDisplayData = await parseResumeWithAI(rawText)
+      setResume(resumeDisplayData)
       navigate('/resume')
     } catch (err) {
       setErrorMsg(err instanceof Error ? err.message : 'Something went wrong.')

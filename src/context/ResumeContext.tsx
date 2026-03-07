@@ -1,11 +1,11 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
-import type { ResumeData } from '../models/Resume.ts'
+import type {ResumeData, ResumeDisplayData} from '../models/Resume.ts'
 
 const STORAGE_KEY = 'resume_data'
 
 interface ResumeContextValue {
   resume: ResumeData | null
-  setResume: (data: ResumeData) => void
+  setResume: (data: ResumeDisplayData) => void
   clearResume: () => void
 }
 
@@ -27,8 +27,17 @@ export function ResumeProvider({ children }: { children: ReactNode }) {
     }
   }, [resume])
 
-  function setResume(data: ResumeData) {
-    setResumeState(data)
+  function setResume(data: ResumeDisplayData) {
+
+    const resumeData: ResumeData = {
+      guid: crypto.randomUUID(),
+      resumeDisplayData: data,
+      uploadDate: new Date(),
+      lastUpdated: undefined,
+      fileName: "resume",
+      fileUrl: undefined
+    }
+    setResumeState(resumeData)
   }
 
   function clearResume() {

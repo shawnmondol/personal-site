@@ -33,8 +33,7 @@ export interface Project {
   link?: string
 }
 
-export interface ResumeData {
-  guid: string
+export interface ResumeDisplayData {
   name: string
   title: string
   summary: string
@@ -43,4 +42,13 @@ export interface ResumeData {
   education: Education[]
   skills: SkillCategory[]
   projects: Project[]
+}
+
+export interface ResumeData {
+  guid: string
+  resumeDisplayData: ResumeDisplayData
+  uploadDate: Date
+  lastUpdated?: Date
+  fileName: string
+  fileUrl?: string
 }

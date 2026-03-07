@@ -1,16 +1,14 @@
 import {useNavigate} from 'react-router-dom'
 import {useResume} from '../context/ResumeContext'
 import {useAuth} from '../context/AuthContext'
-import {HeroSection} from '../components/resume/HeroSection'
-import {ExperienceSection} from '../components/resume/ExperienceSection'
-import {SkillsSection} from '../components/resume/SkillsSection'
-import {EducationSection} from '../components/resume/EducationSection'
-import {ProjectsSection} from '../components/resume/ProjectsSection'
-import {saveResume} from "../services/resume/firestoreResumeService.ts";
-import {toast} from "sonner";
+import {HeroSection} from '../components/resumeDisplay/HeroSection'
+import {ExperienceSection} from '../components/resumeDisplay/ExperienceSection'
+import {SkillsSection} from '../components/resumeDisplay/SkillsSection'
+import {EducationSection} from '../components/resumeDisplay/EducationSection'
+import {ProjectsSection} from '../components/resumeDisplay/ProjectsSection'
 
 export function ResumePage() {
-    const {resume, clearResume} = useResume()
+    const {resume} = useResume()
     const {user} = useAuth()
     const navigate = useNavigate()
     const isAdmin = user?.uid === import.meta.env.VITE_ADMIN_UID
@@ -20,48 +18,32 @@ export function ResumePage() {
         return null
     }
 
-    function handleClear() {
-        clearResume()
-        navigate('/')
-    }
-
-    function handleSave() {
-        console.log("Saving resume:", resume);
-        saveResume(resume!).then(() => {
-            toast.success("Resume saved successfully!");
-        }).catch((error) => {
-            toast.error("Failed to save resume: " + error.message);
-        })
+    function handleEdit() {
+        navigate('/resume/data')
     }
 
     return (
         <div className="min-h-screen bg-gray-50">
             <HeroSection
-                name={resume.name}
-                title={resume.title}
-                summary={resume.summary}
-                contact={resume.contact}
+                name={resume.resumeDisplayData.name}
+                title={resume.resumeDisplayData.title}
+                summary={resume.resumeDisplayData.summary}
+                contact={resume.resumeDisplayData.contact}
             />
 
             <main className="max-w-3xl mx-auto px-6 py-12 space-y-14">
-                <ExperienceSection experience={resume.experience}/>
-                <SkillsSection skills={resume.skills}/>
-                <ProjectsSection projects={resume.projects}/>
-                <EducationSection education={resume.education}/>
+                <ExperienceSection experience={resume.resumeDisplayData.experience}/>
+                <SkillsSection skills={resume.resumeDisplayData.skills}/>
+                <ProjectsSection projects={resume.resumeDisplayData.projects}/>
+                <EducationSection education={resume.resumeDisplayData.education}/>
             </main>
             { isAdmin &&
                 <footer className="text-center pb-10">
                     <button
-                        onClick={handleClear}
-                        className="text-sm text-gray-400 hover:text-red-500 transition-colors"
+                        onClick={handleEdit}
+                        className="text-sm text-gray-400 hover:text-red-500 cursor-pointer transition-colors"
                     >
-                        Upload a different resume
-                    </button>
-
-                    <button
-                        onClick={handleSave}
-                        className="ml-6 text-sm text-gray-400 hover:text-red-500 transition-colors">
-                        Save Resume
+                        Edit Content
                     </button>
                 </footer>
             }

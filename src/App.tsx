@@ -1,19 +1,21 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { ResumeProvider, useResume } from './context/ResumeContext'
+import { ResumeProvider } from './context/ResumeContext'
 import { AuthProvider } from './context/AuthContext'
 import { UploadPage } from './pages/UploadPage'
 import { ResumePage } from './pages/ResumePage'
 import {Header} from "./components/Header.tsx";
 import { Toaster } from 'sonner';
+import {ResumeDataPage} from "./pages/ResumeDataPage.tsx";
 
 function AppRoutes() {
-  const { resume } = useResume()
 
   return (
     <Routes>
-      <Route path="/" element={resume ? <Navigate to="/resume" replace /> : <UploadPage />} />
-      <Route path="/resume" element={<ResumePage />} />
-      <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="/" element={<ResumePage />} />
+        <Route path="/resume" element={<ResumePage />} />
+        <Route path="/resume/data" element={<ResumeDataPage />} />
+        <Route path="/resume/data/upload" element={<UploadPage />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )
 }

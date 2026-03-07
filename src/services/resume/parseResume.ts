@@ -1,4 +1,4 @@
-import type { ResumeData } from '../../models/Resume.ts'
+import type {ResumeDisplayData} from '../../models/Resume.ts'
 import { getFunctions, httpsCallable, connectFunctionsEmulator } from 'firebase/functions'
 import { app } from '../auth/firebaseService.ts'
 
@@ -10,8 +10,8 @@ if (import.meta.env.DEV) {
 
 const parseResumeFunc = httpsCallable(functions, 'parseResume')
 
-export async function parseResumeWithAI(rawText: string): Promise<ResumeData> {
+export async function parseResumeWithAI(rawText: string): Promise<ResumeDisplayData> {
   const result = await parseResumeFunc({ rawText })
-  return result.data as ResumeData
+  return result.data as ResumeDisplayData
 }
 
