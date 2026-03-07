@@ -1,4 +1,4 @@
-import type { SkillCategory } from '../../types/Resume.ts'
+import type { SkillCategory } from '../../models/Resume.ts'
 
 interface Props {
   skills: SkillCategory[]

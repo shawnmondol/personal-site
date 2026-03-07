@@ -1,4 +1,4 @@
-import type { ResumeData } from '../../types/Resume.ts'
+import type { ResumeData } from '../../models/Resume.ts'
 
 interface Props {
   name: ResumeData['name']

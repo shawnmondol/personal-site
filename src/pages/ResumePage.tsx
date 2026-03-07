@@ -5,6 +5,7 @@ import { ExperienceSection } from '../components/resume/ExperienceSection'
 import { SkillsSection } from '../components/resume/SkillsSection'
 import { EducationSection } from '../components/resume/EducationSection'
 import { ProjectsSection } from '../components/resume/ProjectsSection'
+import {saveResume} from "../services/resume/firestoreResumeService.ts";
 
 export function ResumePage() {
   const { resume, clearResume } = useResume()
@@ -18,6 +19,10 @@ export function ResumePage() {
   function handleClear() {
     clearResume()
     navigate('/')
+  }
+
+  function handleSave() {
+      saveResume(resume!)
   }
 
   return (
@@ -43,6 +48,11 @@ export function ResumePage() {
         >
           Upload a different resume
         </button>
+          <button
+          onClick={handleSave}
+          className="text-sm text-gray-400 hover:text-red-500 transition-colors">
+            Save Resume
+          </button>
       </footer>
     </div>
   )

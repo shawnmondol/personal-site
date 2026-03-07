@@ -1,4 +1,4 @@
-import type { Education } from '../../types/Resume.ts'
+import type { Education } from '../../models/Resume.ts'
 
 interface Props {
   education: Education[]
