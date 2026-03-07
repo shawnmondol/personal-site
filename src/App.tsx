@@ -4,6 +4,7 @@ import { AuthProvider } from './context/AuthContext'
 import { UploadPage } from './pages/UploadPage'
 import { ResumePage } from './pages/ResumePage'
 import {Header} from "./components/Header.tsx";
+import { Toaster } from 'sonner';
 
 function AppRoutes() {
   const { resume } = useResume()
@@ -25,6 +26,7 @@ function App() {
             <ResumeProvider>
                 <AppRoutes />
             </ResumeProvider>
+            <Toaster />
         </AuthProvider>
     </BrowserRouter>
   )

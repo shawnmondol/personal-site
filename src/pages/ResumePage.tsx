@@ -1,5 +1,6 @@
 import {useNavigate} from 'react-router-dom'
 import {useResume} from '../context/ResumeContext'
+import {useAuth} from '../context/AuthContext'
 import {HeroSection} from '../components/resume/HeroSection'
 import {ExperienceSection} from '../components/resume/ExperienceSection'
 import {SkillsSection} from '../components/resume/SkillsSection'
@@ -10,7 +11,9 @@ import {toast} from "sonner";
 
 export function ResumePage() {
     const {resume, clearResume} = useResume()
+    const {user} = useAuth()
     const navigate = useNavigate()
+    const isAdmin = user?.uid === import.meta.env.VITE_ADMIN_UID
 
     if (!resume) {
         navigate('/')
@@ -46,21 +49,22 @@ export function ResumePage() {
                 <ProjectsSection projects={resume.projects}/>
                 <EducationSection education={resume.education}/>
             </main>
+            { isAdmin &&
+                <footer className="text-center pb-10">
+                    <button
+                        onClick={handleClear}
+                        className="text-sm text-gray-400 hover:text-red-500 transition-colors"
+                    >
+                        Upload a different resume
+                    </button>
 
-            <footer className="text-center pb-10">
-                <button
-                    onClick={handleClear}
-                    className="text-sm text-gray-400 hover:text-red-500 transition-colors"
-                >
-                    Upload a different resume
-                </button>
-
-                <button
-                    onClick={handleSave}
-                    className="ml-6 text-sm text-gray-400 hover:text-red-500 transition-colors">
-                    Save Resume
-                </button>
-            </footer>
+                    <button
+                        onClick={handleSave}
+                        className="ml-6 text-sm text-gray-400 hover:text-red-500 transition-colors">
+                        Save Resume
+                    </button>
+                </footer>
+            }
         </div>
     )
 }
