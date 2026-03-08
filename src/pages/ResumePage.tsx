@@ -15,6 +15,10 @@ export function ResumePage() {
     const navigate = useNavigate()
     const isAdmin = user?.uid === import.meta.env.VITE_ADMIN_UID
 
+    useEffect(() => {
+        getActiveResume().then(resume => loadResume(resume!))
+    }, [])
+
     if (!resume) {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center text-gray-400">
@@ -26,10 +30,6 @@ export function ResumePage() {
     function handleEdit() {
         navigate('/resume/data')
     }
-
-    useEffect(() => {
-        getActiveResume().then(resume => loadResume(resume))
-    })
 
     return (
         <div className="min-h-screen bg-gray-50">
