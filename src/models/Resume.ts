@@ -51,4 +51,5 @@ export interface ResumeData {
   lastUpdated?: Date
   fileName: string
   fileUrl?: string
+  isActive: boolean
 }

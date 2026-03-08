@@ -1,4 +1,14 @@
-import {collection, doc, getDoc, getDocs, setDoc} from "firebase/firestore";
+import {
+    collection,
+    query,
+    where,
+    limit,
+    doc,
+    getDoc,
+    getDocs,
+    setDoc,
+    updateDoc
+} from "firebase/firestore";
 import {app, db} from "../auth/firebaseService";
 import type {ResumeData} from "../../models/Resume";
 import {getDownloadURL, getStorage, ref, uploadBytes} from "firebase/storage";
@@ -16,6 +26,26 @@ export async function uploadResumePdf(file: File, guid: string) {
 export async function saveResume(resume: ResumeData) {
     const resumeRef = doc(db, RESUME_COLLECTION, resume.guid);
     await setDoc(resumeRef, resume);
+}
+
+export async function updateResume(guid: string, updates: Partial<ResumeData>) {
+    const resumeRef = doc(db, RESUME_COLLECTION, guid);
+    await updateDoc(resumeRef, updates);
+}
+
+export async function setActiveResume(guid: string) {
+    const q = query(collection(db, RESUME_COLLECTION), where('isActive', '==', true), limit(1))
+    const snap = await getDocs(q)
+    if (!snap.empty) {
+        await updateResume(snap.docs[0].id, {isActive: false})
+    }
+    await updateResume(guid, {isActive: true})
+}
+
+export async function getActiveResume(): Promise<ResumeData | null> {
+    const q = query(collection(db, RESUME_COLLECTION), where('isActive', '==', true), limit(1))
+    const snap = await getDocs(q)
+    return snap.empty ? null : snap.docs[0].data() as ResumeData
 }
 
 export async function getResume(guid: string): Promise<ResumeData | null> {

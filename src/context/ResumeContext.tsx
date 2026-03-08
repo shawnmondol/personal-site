@@ -1,10 +1,11 @@
 import { createContext, useContext, useState, type ReactNode } from 'react'
 import type {ResumeData, ResumeDisplayData} from '../models/Resume.ts'
-import {uploadResumePdf} from "../services/resume/firestoreResumeService.ts";
+import {saveResume, uploadResumePdf} from "../services/resume/firestoreResumeService.ts";
 
 interface ResumeContextValue {
   resume: ResumeData | null
-  setResume: (data: ResumeDisplayData, file: File) => void
+  setResume: (data: ResumeDisplayData, file: File) => Promise<void>
+  loadResume: (data: ResumeData) => void
 }
 
 const ResumeContext = createContext<ResumeContextValue | null>(null)
@@ -19,15 +20,21 @@ export function ResumeProvider({ children }: { children: ReactNode }) {
       guid,
       resumeDisplayData: data,
       uploadDate: new Date(),
-      lastUpdated: undefined,
+      lastUpdated: new Date(),
       fileName: file.name,
-      fileUrl
+      fileUrl,
+      isActive: true
     }
+    await saveResume(resumeData)
     setResumeState(resumeData)
   }
 
+  function loadResume(data: ResumeData) {
+    setResumeState(data)
+  }
+
   return (
-    <ResumeContext.Provider value={{ resume, setResume }}>
+    <ResumeContext.Provider value={{ resume, setResume, loadResume}}>
       {children}
     </ResumeContext.Provider>
   )

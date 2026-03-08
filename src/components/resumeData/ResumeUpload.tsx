@@ -28,9 +28,9 @@ export function ResumeUpload() {
 
             setStatus('parsing')
             const resumeDisplayData = await parseResumeWithAI(rawText)
-            setResume(resumeDisplayData, file)
+            await setResume(resumeDisplayData, file)
             toast.success('Resume uploaded successfully!')
-            navigate('/resume/data')
+            navigate('/resume')
         } catch (err) {
             setErrorMsg(err instanceof Error ? err.message : 'Something went wrong.')
             setStatus('error')

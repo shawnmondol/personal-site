@@ -6,21 +6,30 @@ import {ExperienceSection} from '../components/resumeDisplay/ExperienceSection'
 import {SkillsSection} from '../components/resumeDisplay/SkillsSection'
 import {EducationSection} from '../components/resumeDisplay/EducationSection'
 import {ProjectsSection} from '../components/resumeDisplay/ProjectsSection'
+import {useEffect} from "react";
+import {getActiveResume} from "../services/resume/firestoreResumeService.ts";
 
 export function ResumePage() {
-    const {resume} = useResume()
+    const {resume, loadResume} = useResume()
     const {user} = useAuth()
     const navigate = useNavigate()
     const isAdmin = user?.uid === import.meta.env.VITE_ADMIN_UID
 
     if (!resume) {
-        navigate('/')
-        return null
+        return (
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center text-gray-400">
+                This site is under construction. Please check back later.
+            </div>
+        )
     }
 
     function handleEdit() {
         navigate('/resume/data')
     }
+
+    useEffect(() => {
+        getActiveResume().then(resume => loadResume(resume))
+    })
 
     return (
         <div className="min-h-screen bg-gray-50">
