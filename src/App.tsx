@@ -3,7 +3,7 @@ import { ResumeProvider } from './context/ResumeContext'
 import { AuthProvider } from './context/AuthContext'
 import { UploadPage } from './pages/UploadPage'
 import { ResumePage } from './pages/ResumePage'
-import {Header} from "./components/Header.tsx";
+import {Header} from "./components/SiteComponents/Header.tsx";
 import { Toaster } from 'sonner';
 import {ResumeDataPage} from "./pages/ResumeDataPage.tsx";
 

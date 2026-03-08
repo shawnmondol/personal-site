@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 import {UserMenu} from "./UserMenu.tsx"
-import { useAuth } from "../context/AuthContext.tsx"
+import { useAuth } from "../../context/AuthContext.tsx"
 import githubIcon from '/github.svg'
 import linkedinIcon from '/linkedin.png'
 import gitlabIcon from '/gitlab.svg'
@@ -13,7 +13,7 @@ export function Header() {
         { label: 'GitLab', href: import.meta.env.VITE_GITLAB, image: gitlabIcon },
     ] as { label: string; href: string; image: string }[]
     return (
-        <header className="w-full h-20 bg-linear-to-r from-orange-300 via-red-400 to-blue-500 border-b border-gray-700">
+        <header className="w-full h-20 bg-linear-to-r from-orange-300 via-red-400 to-blue-500 border-b-2 border-gray-500">
             <div className="flex justify-end items-center px-4 h-full">
                 <div className="absolute left-1/2 translate-x-[-50%]">
                     <Link to={"/"} className={"font-semibold text-3xl"}>
