@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { ResumeProvider } from './context/ResumeContext'
 import { AuthProvider } from './context/AuthContext'
-import { UploadPage } from './pages/UploadPage'
 import { ResumePage } from './pages/ResumePage'
 import {Header} from "./components/SiteComponents/Header.tsx";
 import { Toaster } from 'sonner';
@@ -14,7 +13,6 @@ function AppRoutes() {
         <Route path="/" element={<ResumePage />} />
         <Route path="/resume" element={<ResumePage />} />
         <Route path="/resume/data" element={<ResumeDataPage />} />
-        <Route path="/resume/data/upload" element={<UploadPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )

@@ -1,52 +1,33 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
+import { createContext, useContext, useState, type ReactNode } from 'react'
 import type {ResumeData, ResumeDisplayData} from '../models/Resume.ts'
-
-const STORAGE_KEY = 'resume_data'
+import {uploadResumePdf} from "../services/resume/firestoreResumeService.ts";
 
 interface ResumeContextValue {
   resume: ResumeData | null
-  setResume: (data: ResumeDisplayData) => void
-  clearResume: () => void
+  setResume: (data: ResumeDisplayData, file: File) => void
 }
 
 const ResumeContext = createContext<ResumeContextValue | null>(null)
 
 export function ResumeProvider({ children }: { children: ReactNode }) {
-  const [resume, setResumeState] = useState<ResumeData | null>(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY)
-      return stored ? (JSON.parse(stored) as ResumeData) : null
-    } catch {
-      return null
-    }
-  })
+  const [resume, setResumeState] = useState<ResumeData | null>(null)
 
-  useEffect(() => {
-    if (resume) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(resume))
-    }
-  }, [resume])
-
-  function setResume(data: ResumeDisplayData) {
-
+  async function setResume(data: ResumeDisplayData, file: File) {
+    const guid = crypto.randomUUID()
+    const fileUrl = await uploadResumePdf(file, guid)
     const resumeData: ResumeData = {
-      guid: crypto.randomUUID(),
+      guid,
       resumeDisplayData: data,
       uploadDate: new Date(),
       lastUpdated: undefined,
-      fileName: "resume",
-      fileUrl: undefined
+      fileName: file.name,
+      fileUrl
     }
     setResumeState(resumeData)
   }
 
-  function clearResume() {
-    localStorage.removeItem(STORAGE_KEY)
-    setResumeState(null)
-  }
-
   return (
-    <ResumeContext.Provider value={{ resume, setResume, clearResume }}>
+    <ResumeContext.Provider value={{ resume, setResume }}>
       {children}
     </ResumeContext.Provider>
   )

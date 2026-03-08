@@ -6,9 +6,10 @@ interface ButtonProps {
 
 const styles = {
     button: [
-        "bg-linear-to-r from-orange-300 via-red-400 to-blue-500",
-        "hover:bg-gradient-to-r hover:from-orange-400 hover:via-red-500 hover:to-blue-600 cursor-pointer",
-        "font-bold py-2 px-4 rounded",
+        "bg-linear-to-r from-orange-400 via-red-500 to-blue-600 border-1 border-gray-400 shadow-lg",
+        "hover:bg-gradient-to-r hover:from-orange-300 hover:via-red-400 hover:to-blue-500 cursor-pointer",
+        "font-bold py-2 px-4 rounded transition-transform",
+        "active:scale-95 active:shadow-sm",
         "text-white"
     ].join(' ')
 }
