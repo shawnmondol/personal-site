@@ -3,12 +3,21 @@ import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
 import {Table} from "../SiteComponents/Table.tsx";
 import {Button} from "../SiteComponents/Button.tsx";
 import {setActiveResume} from "../../services/resume/firestoreResumeService.ts";
+import {Timestamp} from "firebase/firestore";
 import {toast} from "sonner";
 
 
 const columnHelper = createColumnHelper<ResumeData>()
 
 const emptyCell = <span className="text-gray-400 italic">empty</span>
+
+const dateFormat = new Intl.DateTimeFormat("en-us", {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric'
+})
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const columns: ColumnDef<ResumeData, any>[] = [
@@ -31,18 +40,38 @@ const columns: ColumnDef<ResumeData, any>[] = [
                 </div>
             )
     }),
+    columnHelper.accessor('resumeDisplayData.contact', {
+        header: 'Contact Info',
+        cell: info => "Experience"
+    }),
+    columnHelper.accessor('resumeDisplayData.experience', {
+        header: 'Experience',
+        cell: info => "Experience"
+    }),
+    columnHelper.accessor('resumeDisplayData.education', {
+        header: 'Education',
+        cell: info => "Experience"
+    }),
+    columnHelper.accessor('resumeDisplayData.skills', {
+        header: 'Skills',
+        cell: info => "Experience"
+    }),
+    columnHelper.accessor('resumeDisplayData.projects', {
+        header: 'Projects',
+        cell: info => "Experience"
+    }),
     columnHelper.accessor('uploadDate', {
         header: 'Upload Date',
         cell: info => {
-            const v = info.getValue()
-            return v ? new Date(v).toLocaleDateString() : emptyCell
+            const date = info.getValue()
+            return date ? dateFormat.format(new Timestamp(date.seconds, date.nanoseconds).toDate()) : emptyCell
         },
     }),
     columnHelper.accessor('lastUpdated', {
         header: 'Last Updated',
         cell: info => {
-            const v = info.getValue()
-            return v ? new Date(v).toLocaleDateString() : emptyCell
+            const date = info.getValue()
+            return date ? dateFormat.format(new Timestamp(date.seconds, date.nanoseconds).toDate()) : emptyCell
         },
     }),
     columnHelper.display({
