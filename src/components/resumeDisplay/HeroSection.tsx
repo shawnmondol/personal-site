@@ -1,10 +1,10 @@
-import type { ResumeData } from '../../models/Resume.ts'
+import type { ResumeDisplayData } from '../../models/Resume.ts'
 
 interface Props {
-  name: ResumeData['name']
-  title: ResumeData['title']
-  summary: ResumeData['summary']
-  contact: ResumeData['contact']
+  name: ResumeDisplayData['name']
+  title: ResumeDisplayData['title']
+  summary: ResumeDisplayData['summary']
+  contact: ResumeDisplayData['contact']
 }
 
 export function HeroSection({ name, title, summary, contact }: Props) {
