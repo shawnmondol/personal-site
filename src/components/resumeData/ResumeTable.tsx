@@ -52,7 +52,6 @@ const columns: ColumnDef<ResumeData, any>[] = [
             <div className="flex space-x-2">
                 { !props.row.original.isActive ? (
                     <Button
-                        content="Set Display"
                         onClick={() =>
                             setActiveResume(props.row.original.guid).then(() => {
                                 toast.success('Resume set as active')
@@ -61,7 +60,9 @@ const columns: ColumnDef<ResumeData, any>[] = [
                                 toast.error(e.message)
                             })
                         }
-                    />
+                    >
+                        Set Display
+                    </Button>
                 ) : <b>Active</b>
                 }
             </div>

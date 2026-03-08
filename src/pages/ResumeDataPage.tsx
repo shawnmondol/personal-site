@@ -25,7 +25,7 @@ export function ResumeDataPage() {
         <div className="m-auto w-4/5 justify-center p-20">
             <div className="flex justify-between items-center">
                 <h1 className="text-3xl font-bold mb-4">Resume Data</h1>
-                <Button content="Add Resume" onClick={openModal} />
+                <Button onClick={openModal} >Add Resume</Button>
             </div>
             <ResumeTable resumes={resumes} />
             <PopupModal isOpen={showModal} onClose={() => setShowModal(false)}>

@@ -1,7 +1,8 @@
 interface ButtonProps {
-    content: string
+    children: React.ReactNode
     onClick: () => void
     disabled?: boolean
+    className?: string
 }
 
 const styles = {
@@ -14,13 +15,13 @@ const styles = {
     ].join(' ')
 }
 
-export function Button({content, onClick, disabled}: ButtonProps) {
+export function Button({children, onClick, disabled, className}: ButtonProps) {
     return (
         <button
             onClick={onClick}
             disabled={disabled}
-            className={styles.button}>
-            {content}
+            className={styles.button + ' ' + className}>
+            {children}
         </button>
     )
 }
