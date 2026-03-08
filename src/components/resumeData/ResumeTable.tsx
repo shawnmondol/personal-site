@@ -78,6 +78,6 @@ export function ResumeTable({ resumes }: ResumeTableProps) {
     return (
         <Table
             columns={columns}
-            data={resumes ?? []} />
+            data={resumes} />
     )
 }
