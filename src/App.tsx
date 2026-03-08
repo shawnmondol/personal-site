@@ -5,6 +5,7 @@ import { ResumePage } from './pages/ResumePage'
 import {Header} from "./components/SiteComponents/Header.tsx";
 import { Toaster } from 'sonner';
 import {ResumeDataPage} from "./pages/ResumeDataPage.tsx";
+import {AdminAuth} from "./components/SiteComponents/AdminAuth.tsx";
 
 function AppRoutes() {
 
@@ -12,7 +13,11 @@ function AppRoutes() {
     <Routes>
         <Route path="/" element={<ResumePage />} />
         <Route path="/resume" element={<ResumePage />} />
-        <Route path="/resume/data" element={<ResumeDataPage />} />
+        <Route path="/resume/data" element={
+            <AdminAuth adminOnly={true}>
+                <ResumeDataPage />
+            </AdminAuth>
+        }/>
         <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )
