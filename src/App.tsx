@@ -1,11 +1,12 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import {BrowserRouter, Routes, Route, Navigate, Outlet} from 'react-router-dom'
 import { ResumeProvider } from './context/ResumeContext'
 import { AuthProvider } from './context/AuthContext'
 import { ResumePage } from './pages/ResumePage'
-import {Header} from "./components/SiteComponents/Header.tsx";
-import { Toaster } from 'sonner';
-import {ResumeDataPage} from "./pages/ResumeDataPage.tsx";
-import {AdminAuth} from "./components/SiteComponents/AdminAuth.tsx";
+import {Header} from "./components/SiteComponents/Header.tsx"
+import { Toaster } from 'sonner'
+import {ResumeDataPage} from "./pages/ResumeDataPage.tsx"
+import {AdminAuth} from "./components/SiteComponents/AdminAuth.tsx"
+import {EditResumePage} from "./pages/EditResumePage.tsx"
 
 function AppRoutes() {
 
@@ -13,12 +14,12 @@ function AppRoutes() {
     <Routes>
         <Route path="/" element={<ResumePage />} />
         <Route path="/resume" element={<ResumePage />} />
-        <Route path="/resume/data" element={
-            <AdminAuth adminOnly={true}>
-                <ResumeDataPage />
-            </AdminAuth>
-        }/>
         <Route path="*" element={<Navigate to="/" replace />} />
+
+        <Route element={<AdminAuth adminOnly={true}><Outlet /></AdminAuth>}>
+            <Route path="/resume/data" element={<ResumeDataPage />}/>
+            <Route path={"/resume/:guid/edit"} element={<EditResumePage />}/>
+        </Route>
     </Routes>
   )
 }

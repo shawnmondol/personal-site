@@ -5,6 +5,8 @@ import {Button} from "../SiteComponents/Button.tsx";
 import {setActiveResume} from "../../services/resume/firestoreResumeService.ts";
 import {Timestamp} from "firebase/firestore";
 import {toast} from "sonner";
+import {Link} from "react-router-dom";
+import {ExternalLink} from "lucide-react";
 
 
 const columnHelper = createColumnHelper<ResumeData>()
@@ -35,30 +37,30 @@ const columns: ColumnDef<ResumeData, any>[] = [
                         href={info.row.original.fileUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-blue-500 hover:text-blue-700"
-                    >{info.getValue()}</a>
+                        className="flex text-blue-500 hover:text-blue-700"
+                    >
+                        {info.getValue()}
+                        <ExternalLink className="ml-1 h-5 w-5"/>
+                    </a>
+
                 </div>
             )
     }),
-    columnHelper.accessor('resumeDisplayData.contact', {
-        header: 'Contact Info',
-        cell: info => "Experience"
-    }),
-    columnHelper.accessor('resumeDisplayData.experience', {
-        header: 'Experience',
-        cell: info => "Experience"
-    }),
-    columnHelper.accessor('resumeDisplayData.education', {
-        header: 'Education',
-        cell: info => "Experience"
-    }),
-    columnHelper.accessor('resumeDisplayData.skills', {
-        header: 'Skills',
-        cell: info => "Experience"
-    }),
-    columnHelper.accessor('resumeDisplayData.projects', {
-        header: 'Projects',
-        cell: info => "Experience"
+    columnHelper.accessor('resumeDisplayData', {
+        header: 'Resume Data',
+        cell: info => {
+            const resumeData = info.getValue()
+            if (!resumeData) return emptyCell
+            return (
+                <Link
+                    to={`/resume/${info.row.original.guid}/edit`}
+                    className={"flex text-blue-500 hover:text-blue-700"}
+                >
+                    Content
+                    <ExternalLink className="ml-1 h-5 w-5"/>
+                </Link>
+            )
+        }
     }),
     columnHelper.accessor('uploadDate', {
         header: 'Upload Date',

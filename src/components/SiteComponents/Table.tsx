@@ -72,7 +72,7 @@ export function Table<T>({ data, columns }: { data?: T[], columns: ColumnDef<T, 
             </div>
 
             {/* Table */}
-            <div className="rounded-xl overflow-hidden border border-gray-200 shadow-sm">
+            <div className="rounded-xl overflow-x-auto border border-gray-200 shadow-sm">
                 <table className="w-full text-left border-collapse">
                     <thead>
                         {table.getHeaderGroups().map(headerGroup => (
@@ -109,7 +109,7 @@ export function Table<T>({ data, columns }: { data?: T[], columns: ColumnDef<T, 
                                     key={row.id}
                                     className={[
                                         i % 2 === 0 ? 'bg-white' : 'bg-gray-50/50',
-                                        'border-b border-gray-100 hover:bg-blue-50 transition-colors cursor-pointer',
+                                        'border-b border-gray-100 hover:bg-blue-50 transition-colors',
                                     ].join(' ')}
                                 >
                                     {row.getVisibleCells().map(cell => (
