@@ -1,17 +1,19 @@
 import type { ResumeDisplayData } from '../../models/Resume.ts'
+import {Button} from "../SiteComponents/Button.tsx";
 
 interface Props {
   name: ResumeDisplayData['name']
   title: ResumeDisplayData['title']
   summary: ResumeDisplayData['summary']
   contact: ResumeDisplayData['contact']
+  editMode: boolean
 }
 
-export function HeroSection({ name, title, summary, contact }: Props) {
+export function HeroSection({ name, title, summary, contact, editMode = false }: Props) {
   const links = [
     contact.email && { label: contact.email, href: `mailto:${contact.email}` },
-    import.meta.env.GITHUB && { label: 'GitHub', href: import.meta.env.GITHUB },
-    import.meta.env.LINKEDIN && { label: 'LinkedIn', href: import.meta.env.LINKEDIN },
+    import.meta.env.VITE_GITHUB && { label: 'GitHub', href: import.meta.env.VITE_GITHUB },
+    import.meta.env.VITE_LINKEDIN && { label: 'LinkedIn', href: import.meta.env.VITE_LINKEDIN },
   ].filter(Boolean) as { label: string; href: string }[]
   return (
     <section className="bg-gray-900 text-white py-20 px-6">
@@ -39,6 +41,14 @@ export function HeroSection({ name, title, summary, contact }: Props) {
               </a>
             ))}
           </div>
+        )}
+
+        { editMode && (
+            <Button
+                onClick={()=>{}}
+                className="mt-6">
+              Edit
+            </Button>
         )}
       </div>
     </section>

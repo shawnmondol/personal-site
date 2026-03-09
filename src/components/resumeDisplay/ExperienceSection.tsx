@@ -1,10 +1,12 @@
 import type { Experience } from '../../models/Resume.ts'
+import {Button} from "../SiteComponents/Button.tsx";
 
 interface Props {
-  experience: Experience[]
+    experience: Experience[]
+    editMode?: boolean
 }
 
-export function ExperienceSection({ experience }: Props) {
+export function ExperienceSection({ experience, editMode = false }: Props) {
   if (!experience.length) return null
 
   return (
@@ -34,8 +36,14 @@ export function ExperienceSection({ experience }: Props) {
                 ))}
               </ul>
             )}
+          { editMode && (
+              <Button onClick={() => {}} className="mt-4">Edit</Button>
+          )}
           </div>
         ))}
+      {editMode && (
+          <Button onClick={() => {}} className="mt-4">Add Job</Button>
+      )}
       </div>
     </section>
   )

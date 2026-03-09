@@ -1,10 +1,12 @@
 import type { Education } from '../../models/Resume.ts'
+import {Button} from "../SiteComponents/Button.tsx";
 
 interface Props {
-  education: Education[]
+    education: Education[]
+    editMode?: boolean
 }
 
-export function EducationSection({ education }: Props) {
+export function EducationSection({ education, editMode = false }: Props) {
   if (!education.length) return null
 
   return (
@@ -24,6 +26,9 @@ export function EducationSection({ education }: Props) {
           </div>
         ))}
       </div>
+        {editMode && (
+            <Button onClick={() => {}} className="mt-4">Edit</Button>
+        )}
     </section>
   )
 }

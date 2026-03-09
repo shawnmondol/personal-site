@@ -1,10 +1,12 @@
 import type { Project } from '../../models/Resume.ts'
+import {Button} from "../SiteComponents/Button.tsx";
 
 interface Props {
-  projects: Project[]
+    projects: Project[]
+    editMode?: boolean
 }
 
-export function ProjectsSection({ projects }: Props) {
+export function ProjectsSection({ projects, editMode = false }: Props) {
   if (!projects.length) return null
 
   return (
@@ -40,6 +42,9 @@ export function ProjectsSection({ projects }: Props) {
           </div>
         ))}
       </div>
+        {editMode && (
+            <Button onClick={() => {}} className="mt-4">Edit</Button>
+        )}
     </section>
   )
 }
