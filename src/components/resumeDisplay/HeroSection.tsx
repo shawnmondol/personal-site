@@ -6,7 +6,7 @@ interface Props {
   title: ResumeDisplayData['title']
   summary: ResumeDisplayData['summary']
   contact: ResumeDisplayData['contact']
-  editMode: boolean
+  editMode?: boolean
 }
 
 export function HeroSection({ name, title, summary, contact, editMode = false }: Props) {
