@@ -5,11 +5,11 @@ import {Loading} from "../components/SiteComponents/Loading.tsx";
 import {getResume} from "../services/resume/firestoreResumeService.ts";
 import {Button} from "../components/SiteComponents/Button.tsx";
 import {MoveLeft} from "lucide-react";
-import {HeroSection} from "../components/resumeDisplay/HeroSection.tsx";
-import {ExperienceSection} from "../components/resumeDisplay/ExperienceSection.tsx";
-import {SkillsSection} from "../components/resumeDisplay/SkillsSection.tsx";
-import {ProjectsSection} from "../components/resumeDisplay/ProjectsSection.tsx";
-import {EducationSection} from "../components/resumeDisplay/EducationSection.tsx";
+import {HeroSection} from "../components/ResumeDisplay/HeroSection.tsx";
+import {ExperienceSection} from "../components/ResumeDisplay/ExperienceSection.tsx";
+import {SkillsSection} from "../components/ResumeDisplay/SkillsSection.tsx";
+import {ProjectsSection} from "../components/ResumeDisplay/ProjectsSection.tsx";
+import {EducationSection} from "../components/ResumeDisplay/EducationSection.tsx";
 
 
 export function EditResumePage() {
@@ -39,6 +39,7 @@ export function EditResumePage() {
                 summary={resumeData.summary}
                 contact={resumeData.contact}
                 editMode={true}
+                onChange={updated => setResumeData({...resumeData, ...updated})}
             />
             <main className="max-w-3xl mx-auto px-6 py-12 space-y-14">
                 <ExperienceSection experience={resumeData.experience} editMode={true}/>

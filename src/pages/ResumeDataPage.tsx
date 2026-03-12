@@ -1,8 +1,8 @@
 import {getAllResumes} from "../services/resume/firestoreResumeService.ts";
-import {ResumeTable} from "../components/resumeData/ResumeTable.tsx";
+import {ResumeTable} from "../components/ResumeData/ResumeTable.tsx";
 import {Button} from "../components/SiteComponents/Button.tsx";
 import {PopupModal} from "../components/SiteComponents/PopupModal.tsx";
-import {ResumeUpload} from "../components/resumeData/ResumeUpload.tsx";
+import {ResumeUpload} from "../components/ResumeData/ResumeUpload.tsx";
 import {useEffect, useState} from "react";
 import type {ResumeData} from "../models/Resume.ts";
 

@@ -23,7 +23,7 @@ export function Header() {
             <div className="flex justify-end items-center px-4 h-full">
                 <div className="absolute left-1/2 translate-x-[-50%]">
                     <Link to={"/"} className={"font-semibold text-3xl"}>
-                        Workshop
+                        Portfolio
                     </Link>
                 </div>
                 {links.length > 0 && (
