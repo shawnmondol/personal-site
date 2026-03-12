@@ -1,6 +1,4 @@
 import type { Experience } from '../../models/Resume.ts'
-import {Button} from "../SiteComponents/Button.tsx";
-import {EditHeroSectionForm} from "../ResumeEditForms/EditHeroSectionForm.tsx";
 import {PopupModal} from "../SiteComponents/PopupModal.tsx";
 import {useState} from "react";
 import {EditExperienceSectionForm} from "../ResumeEditForms/EditExperienceSectionForm.tsx";
@@ -8,6 +6,7 @@ import {EditExperienceSectionForm} from "../ResumeEditForms/EditExperienceSectio
 interface Props {
     experience: Experience[]
     editMode?: boolean
+    onChange?: (updated: Experience) => void
 }
 
 export function ExperienceSection({ experience, editMode = false }: Props) {
@@ -20,7 +19,7 @@ export function ExperienceSection({ experience, editMode = false }: Props) {
           <div className="space-y-8">
             {experience.map((job, i) => (
               <div key={i}
-                   className={`relative pl-6 border-l-2 border-blue-200 ${editMode ? 'group hover:opacity-75 transition-opacity cursor-pointer hover:border-2 border-blue-500' : ''}`}
+                   className={`relative pl-6 border-l-2 border-blue-200 ${editMode ? 'group hover:bg-blue-100 transition-opacity cursor-pointer' : ''}`}
                    onClick={editMode ? () => setShowModal(true) : undefined}
               >
                 <div className="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-blue-500" />
@@ -44,19 +43,18 @@ export function ExperienceSection({ experience, editMode = false }: Props) {
                     ))}
                   </ul>
                 )}
-
+              <PopupModal isOpen={showModal} onClose={() => setShowModal(false)}>
+                  <h2 className="text-xl font-bold mb-6">Edit Hero Details</h2>
+                  <EditExperienceSectionForm
+                      experience={job}
+                      onSave={updated => {
+                          onChange?.(updated)
+                          setShowModal(false)
+                      }}
+                  />
+              </PopupModal>
               </div>
             ))}
-          <PopupModal isOpen={showModal} onClose={() => setShowModal(false)}>
-              <h2 className="text-xl font-bold mb-6">Edit Hero Details</h2>
-              <EditExperienceSectionForm
-                  experience={experience}
-                  onSave={updated => {
-                      onChange?.(updated)
-                      setShowModal(false)
-                  }}
-              />
-          </PopupModal>
           </div>
         </section>
     )
