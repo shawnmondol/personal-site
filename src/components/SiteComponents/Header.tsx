@@ -19,7 +19,7 @@ export function Header() {
 
 
     return (
-        <header className="w-full h-20 bg-linear-to-r from-orange-300 via-red-400 to-blue-500 border-b border-gray-400 shadow-2xl">
+        <header className="w-full h-20 bg-linear-to-r from-orange-300 via-red-400 to-blue-500 shadow-2xl">
             <div className="flex justify-end items-center px-4 h-full">
                 <div className="absolute left-1/2 translate-x-[-50%]">
                     <Link to={"/"} className={"font-semibold text-3xl"}>

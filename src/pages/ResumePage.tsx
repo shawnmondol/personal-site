@@ -33,6 +33,7 @@ export function ResumePage() {
                 title={resume.resumeDisplayData.title}
                 summary={resume.resumeDisplayData.summary}
                 contact={resume.resumeDisplayData.contact}
+                fileUrl={resume.fileUrl}
             />
 
             <main className="max-w-3xl mx-auto px-6 py-12 space-y-14">

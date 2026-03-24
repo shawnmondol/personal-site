@@ -19,10 +19,11 @@ export function ExperienceSection({ experience, editMode = false }: Props) {
           <div className="space-y-8">
             {experience.map((job, i) => (
               <div key={i}
-                   className={`relative pl-6 border-l-2 border-blue-200 ${editMode ? 'group hover:bg-blue-100 transition-opacity cursor-pointer' : ''}`}
+                   className={`relative pl-6 border-l-2 border-blue-200 
+                   ${editMode ? 'group hover:bg-blue-100 transition-opacity cursor-pointer' : ''}`}
                    onClick={editMode ? () => setShowModal(true) : undefined}
               >
-                <div className="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-blue-500" />
+                <div className="absolute -left-2.25 top-1 w-4 h-4 rounded-full bg-blue-500" />
                 <div className="flex flex-wrap items-baseline justify-between gap-2">
                   <div>
                     <h3 className="text-lg font-semibold text-gray-800">{job.role}</h3>
@@ -47,8 +48,7 @@ export function ExperienceSection({ experience, editMode = false }: Props) {
                   <h2 className="text-xl font-bold mb-6">Edit Hero Details</h2>
                   <EditExperienceSectionForm
                       experience={job}
-                      onSave={updated => {
-                          onChange?.(updated)
+                      onSave={() => {
                           setShowModal(false)
                       }}
                   />

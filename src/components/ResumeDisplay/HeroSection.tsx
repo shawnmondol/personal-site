@@ -8,11 +8,12 @@ interface Props {
   title: ResumeDisplayData['title']
   summary: ResumeDisplayData['summary']
   contact: ResumeDisplayData['contact']
+  fileUrl?: string
   editMode?: boolean
   onChange?: (updated: Pick<ResumeDisplayData, 'name' | 'title' | 'summary' | 'contact'>) => void
 }
 
-export function HeroSection({ name, title, summary, contact, editMode = false, onChange }: Props) {
+export function HeroSection({ name, title, summary, contact, fileUrl, editMode = false, onChange }: Props) {
   const links = [
     contact.email && { label: contact.email, href: `mailto:${contact.email}` },
     import.meta.env.VITE_GITHUB && { label: 'GitHub', href: import.meta.env.VITE_GITHUB },
@@ -42,7 +43,7 @@ export function HeroSection({ name, title, summary, contact, editMode = false, o
           </div>
         )}
 
-        {links.length > 0 && (
+        {(links.length > 0 || fileUrl) && (
           <div className="mt-6 flex flex-wrap gap-3">
             {links.map((link) => (
               <a
@@ -50,11 +51,28 @@ export function HeroSection({ name, title, summary, contact, editMode = false, o
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-4 py-2 bg-gray-800 hover:bg-blue-600 text-sm text-gray-300 hover:text-white rounded-lg transition-colors"
+                className="px-4 py-2 bg-gray-800 hover:bg-blue-700 text-sm text-gray-300 hover:text-white rounded-lg transition-colors"
               >
                 {link.label}
               </a>
             ))}
+            {fileUrl && (
+              <a
+                href={fileUrl}
+                download
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2 bg-blue-700 hover:bg-blue-600 text-sm text-white rounded-lg transition-colors"
+              >
+                View Resume
+              </a>
+            )}
+            <a
+                href="/about-me"
+                className="px-4 py-2 bg-blue-700 hover:bg-blue-600 text-sm text-white rounded-lg transition-colors"
+            >
+              About Me
+            </a>
           </div>
         )}
 
