@@ -15,7 +15,13 @@ export function TravelGalleryModal({images, isOpen, onClose}: TravelGalleryProps
     function prev() { setCurrentIndex(i => (i - 1 + images.length) % images.length) }
 
     useEffect(() => {
-        if (isOpen) setCurrentIndex(0)
+        if (isOpen) {
+            setCurrentIndex(0)
+            images.forEach(src => {
+                const img = new Image();
+                img.src = src;
+            })
+        }
     }, [isOpen])
 
     return (

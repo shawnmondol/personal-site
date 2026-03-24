@@ -17,7 +17,7 @@ export function TravelMap({ visited, wishlist }: Props) {
       center={[20, 0]}
       zoom={2}
       minZoom={2}
-      className="w-full h-[480px] rounded-xl z-0"
+      className="w-full h-120 rounded-xl z-0"
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -46,7 +46,7 @@ export function TravelMap({ visited, wishlist }: Props) {
               )}
             </div>
             { (loc.images?.length ?? 0 > 0) && (
-              <TravelGalleryModal images={loc.images} isOpen={showGallery} onClose={() => setShowGallery(false)}/>
+              <TravelGalleryModal images={loc.images!} isOpen={showGallery} onClose={() => setShowGallery(false)}/>
             )}
           </Popup>
         </CircleMarker>
