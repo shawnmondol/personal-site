@@ -99,6 +99,8 @@ export function TravelAdminModal({ isOpen, onClose, data, onChange }: Props) {
     await saveAboutData(updated)
     onChange(updated)
     if (expandedId === id) setExpandedId(null)
+    const loc = locations.find(l => l.id === id)
+    toast.success(`Removed ${loc?.city}`)
   }
 
   async function handleImageUpload(locationId: string, files: FileList) {

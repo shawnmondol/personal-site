@@ -1,6 +1,8 @@
 import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import type { TravelLocation } from '../../models/About'
+import {useState} from "react";
+import {TravelGalleryModal} from "./TravelGalleryModal.tsx";
 
 interface Props {
   visited: TravelLocation[]
@@ -8,6 +10,8 @@ interface Props {
 }
 
 export function TravelMap({ visited, wishlist }: Props) {
+  const [showGallery, setShowGallery] = useState(false);
+
   return (
     <MapContainer
       center={[20, 0]}
@@ -30,7 +34,9 @@ export function TravelMap({ visited, wishlist }: Props) {
           <Popup>
             <div className="text-sm w-40">
               {loc.images?.[0] && (
-                <img src={loc.images[0]} alt={loc.city} className="w-full h-24 object-cover rounded mb-2" />
+                <img src={loc.images[0]} alt={loc.city} className="w-full h-24 object-cover rounded mb-2 cursor-pointer"
+                     onClick={()=>setShowGallery(true)}
+                />
               )}
               <p className="font-semibold">{loc.city}, {loc.country}</p>
               {loc.year && <p className="text-gray-500">{loc.year}</p>}
@@ -39,6 +45,9 @@ export function TravelMap({ visited, wishlist }: Props) {
                 <p className="text-xs text-gray-400 mt-1">{loc.images!.length} photos</p>
               )}
             </div>
+            { (loc.images?.length ?? 0 > 0) && (
+              <TravelGalleryModal images={loc.images} isOpen={showGallery} onClose={() => setShowGallery(false)}/>
+            )}
           </Popup>
         </CircleMarker>
       ))}

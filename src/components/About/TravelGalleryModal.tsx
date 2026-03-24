@@ -22,7 +22,7 @@ export function TravelGalleryModal({images, isOpen, onClose}: TravelGalleryProps
         <PopupModal
         isOpen={isOpen}
         onClose={onClose}
-        className="overflow-hidden! p-0! bg:-gray-100!"
+        className="overflow-hidden! p-0! "
         >
             <div className="w-full h-full relative">
                 <div className={"absolute left-0 top-0 flex items-center cursor-pointer transition-colors h-full p-4 hover:bg-gray-100"}

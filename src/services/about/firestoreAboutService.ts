@@ -101,12 +101,14 @@ export function makeLocation(
   coords: { lat: number; lng: number },
   extra?: Pick<TravelLocation, 'year' | 'note'>
 ): TravelLocation {
-  return {
+  const loc: TravelLocation = {
     id: `${city}-${country}-${Date.now()}`.toLowerCase().replace(/\s+/g, '-'),
     city,
     country,
     lat: coords.lat,
     lng: coords.lng,
-    ...extra,
   }
+  if (extra?.year !== undefined) loc.year = extra.year
+  if (extra?.note !== undefined) loc.note = extra.note
+  return loc
 }
