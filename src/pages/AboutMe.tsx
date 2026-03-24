@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext'
 import { getAboutData } from '../services/about/firestoreAboutService'
 import { TravelMap } from '../components/About/TravelMap'
 import { TravelAdminModal } from '../components/About/TravelAdminModal'
+import { TravelCard } from '../components/About/TravelCard'
 import { Loading } from '../components/SiteComponents/Loading'
 import type { AboutData } from '../models/About'
 
@@ -30,7 +31,7 @@ export function AboutMe() {
         <div className="max-w-3xl mx-auto">
           <h1 className="text-5xl font-bold tracking-tight">About Me</h1>
           <p className="mt-4 text-gray-300 leading-relaxed max-w-2xl">
-            Beyond the resume — places I've been, places I want to go, and things I enjoy.
+            My hobbies, places I've been, and places I want to go
           </p>
         </div>
       </section>
@@ -61,18 +62,7 @@ export function AboutMe() {
             <h3 className="text-lg font-semibold text-gray-700 mb-3">Places I've Been</h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
               {resolved.visited.map((loc) => (
-                <div key={loc.id} className="rounded-xl overflow-hidden border border-gray-200 bg-white shadow-sm">
-                  {loc.images?.[0] ? (
-                    <img src={loc.images[0]} alt={loc.city} className="w-full h-32 object-cover" />
-                  ) : (
-                    <div className="w-full h-32 bg-linear-to-br from-blue-100 to-blue-200" />
-                  )}
-                  <div className="px-3 py-2">
-                    <p className="font-semibold text-sm text-gray-800">{loc.city}</p>
-                    <p className="text-xs text-gray-500">{loc.country}{loc.year && ` · ${loc.year}`}</p>
-                    {loc.note && <p className="text-xs text-gray-400 mt-1 line-clamp-2">{loc.note}</p>}
-                  </div>
-                </div>
+                <TravelCard key={loc.id} location={loc} />
               ))}
             </div>
           </section>
