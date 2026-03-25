@@ -128,7 +128,7 @@ export function TravelAdminModal({ isOpen, onClose, data, onChange }: Props) {
 
   const tabClass = (t: Tab) =>
     `px-4 py-2 text-sm font-medium rounded-t-lg border-b-2 transition-colors cursor-pointer ${
-      tab === t ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'
+      tab === t ? 'border-accent-600 text-accent-600' : 'border-transparent text-gray-500 hover:text-gray-700'
     }`
 
   return (
@@ -160,7 +160,7 @@ export function TravelAdminModal({ isOpen, onClose, data, onChange }: Props) {
             {suggestions.map((s, i) => (
               <li
                 key={i}
-                className="px-3 py-2.5 text-sm hover:bg-blue-50 cursor-pointer border-b last:border-0"
+                className="px-3 py-2.5 text-sm hover:bg-accent-50 cursor-pointer border-b last:border-0"
                 onMouseDown={() => handleSelect(s)}
               >
                 <span className="font-medium">{s.city}</span>
@@ -212,7 +212,7 @@ export function TravelAdminModal({ isOpen, onClose, data, onChange }: Props) {
                 <span className="text-gray-500">, {loc.country}</span>
                 {loc.year && <span className="text-gray-400">({loc.year})</span>}
                 {loc.images?.length ? (
-                  <span className="text-xs text-blue-500 ml-1">{loc.images.length} photo{loc.images.length > 1 ? 's' : ''}</span>
+                  <span className="text-xs text-accent-500 ml-1">{loc.images.length} photo{loc.images.length > 1 ? 's' : ''}</span>
                 ) : null}
                 <span className="text-gray-400 ml-auto text-xs">{expandedId === loc.id ? '▲' : '▼'}</span>
               </button>
@@ -257,7 +257,7 @@ export function TravelAdminModal({ isOpen, onClose, data, onChange }: Props) {
                 <button
                   onClick={() => imageInputRef.current?.click()}
                   disabled={uploadingId === loc.id}
-                  className="text-xs px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors cursor-pointer disabled:opacity-50"
+                  className="text-xs px-3 py-1.5 bg-accent-600 hover:bg-accent-700 text-white rounded-lg transition-colors cursor-pointer disabled:opacity-50"
                 >
                   {uploadingId === loc.id ? 'Uploading…' : 'Upload Photos'}
                 </button>

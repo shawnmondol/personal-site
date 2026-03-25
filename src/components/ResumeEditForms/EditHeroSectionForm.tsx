@@ -10,7 +10,7 @@ interface EditFormProps {
     onSave: (updated: Pick<ResumeDisplayData, 'name' | 'title' | 'summary' | 'contact'>) => void
 }
 
-const inputClass = "w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-400"
+const inputClass = "w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-accent-400"
 const labelClass = "block text-sm font-semibold text-gray-600 mb-1"
 
 export function EditHeroSectionForm({ name, title, summary, contact, onSave }: EditFormProps) {

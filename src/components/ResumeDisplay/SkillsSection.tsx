@@ -65,7 +65,7 @@ export function SkillsSection({ skills, editMode = false, onChange }: Props) {
                             if (e.key === Key.Enter) commitEdit(gi, si)
                             if (e.key === Key.Escape) setEditing(null)
                           }}
-                          className="px-3 py-1 text-sm rounded-full border border-blue-400 bg-blue-50 text-blue-700 outline-none w-32"
+                          className="px-3 py-1 text-sm rounded-full border border-accent-400 bg-accent-50 text-accent-700 outline-none w-32"
                         />
                       </motion.div>
                     )
@@ -78,7 +78,7 @@ export function SkillsSection({ skills, editMode = false, onChange }: Props) {
                       exit={{opacity: 0, scale: 0.8}}
                       transition={{duration: 0.15}}
                       onClick={() => editMode && startEdit(gi, si, skill)}
-                      className={`px-3 py-1 bg-blue-50 text-blue-700 text-sm rounded-full border border-blue-100 inline-flex items-center gap-1 ${editMode ? 'cursor-pointer hover:border-blue-400 hover:bg-blue-100' : ''}`}
+                      className={`px-3 py-1 bg-accent-50 text-accent-700 text-sm rounded-full border border-accent-100 inline-flex items-center gap-1 ${editMode ? 'cursor-pointer hover:border-accent-400 hover:bg-accent-100' : ''}`}
                     >
                       {skill}
                       {editMode && (
@@ -90,7 +90,7 @@ export function SkillsSection({ skills, editMode = false, onChange }: Props) {
                               i === gi ? {...g, items: g.items.filter((_, j) => j !== si)} : g
                             ))
                           }}
-                          className="text-blue-400 hover:text-red-500 leading-none transition-colors cursor-pointer"
+                          className="text-accent-400 hover:text-red-500 leading-none transition-colors cursor-pointer"
                         >
                           ×
                         </button>
@@ -108,7 +108,7 @@ export function SkillsSection({ skills, editMode = false, onChange }: Props) {
                     ))
                     startEdit(gi, group.items.length, 'New Skill')
                   }}
-                  className="px-3 py-1 bg-blue-50 text-blue-400 text-sm rounded-full border border-dashed border-blue-300 hover:border-blue-400 hover:text-blue-600 transition-colors cursor-pointer"
+                  className="px-3 py-1 bg-accent-50 text-accent-400 text-sm rounded-full border border-dashed border-accent-300 hover:border-accent-400 hover:text-accent-600 transition-colors cursor-pointer"
                 >
                   Add +
                 </button>

@@ -22,7 +22,7 @@ export function ProjectsSection({ projects, editMode = false }: Props) {
                   href={project.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-500 hover:text-blue-700 text-sm shrink-0"
+                  className="text-accent-500 hover:text-accent-700 text-sm shrink-0"
                 >
                   ↗ Link
                 </a>

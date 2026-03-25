@@ -1,8 +1,10 @@
 import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import type { TravelLocation } from '../../models/About'
-import {useState} from "react";
-import {TravelGalleryModal} from "./TravelGalleryModal.tsx";
+import { useState } from "react"
+import { TravelGalleryModal } from "./TravelGalleryModal.tsx"
+import { useTheme } from '../../context/ThemeContext'
+import { themes } from '../../models/themes'
 
 interface Props {
   visited: TravelLocation[]
@@ -11,6 +13,9 @@ interface Props {
 
 export function TravelMap({ visited, wishlist }: Props) {
   const [showGallery, setShowGallery] = useState(false);
+  const { theme } = useTheme()
+  const accent500 = themes[theme].vars['--theme-300']
+  const accent600 = themes[theme].vars['--theme-400']
 
   return (
     <MapContainer
@@ -29,7 +34,7 @@ export function TravelMap({ visited, wishlist }: Props) {
           key={loc.id}
           center={[loc.lat, loc.lng]}
           radius={7}
-          pathOptions={{ color: '#2563eb', fillColor: '#3b82f6', fillOpacity: 0.9, weight: 2 }}
+          pathOptions={{ color: accent600, fillColor: accent500, fillOpacity: 0.9, weight: 2 }}
         >
           <Popup>
             <div className="text-sm w-40">

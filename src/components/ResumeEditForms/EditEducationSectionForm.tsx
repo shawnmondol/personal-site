@@ -7,7 +7,7 @@ interface EditFormProps {
     onSave: (updated: Education[]) => void
 }
 
-const inputClass = "w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-400"
+const inputClass = "w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-accent-400"
 const labelClass = "block text-sm font-semibold text-gray-600 mb-1"
 
 export function EditEducationSectionForm({ education, onSave }: EditFormProps) {
@@ -62,7 +62,7 @@ export function EditEducationSectionForm({ education, onSave }: EditFormProps) {
                     </div>
                 </div>
             ))}
-            <button onClick={add} className="text-sm text-blue-500 hover:text-blue-700">+ Add Education</button>
+            <button onClick={add} className="text-sm text-accent-500 hover:text-accent-700">+ Add Education</button>
             <div className="flex justify-end pt-2">
                 <Button onClick={() => onSave(form)}>Save</Button>
             </div>

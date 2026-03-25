@@ -30,7 +30,7 @@ export function HeroSection({ name, title, summary, contact, fileUrl, editMode =
     >
       <div className="max-w-3xl mx-auto">
         <h1 className="text-5xl font-bold tracking-tight">{name}</h1>
-        <p className="mt-2 text-xl text-blue-400 font-medium">{title}</p>
+        <p className="mt-2 text-xl text-accent-400 font-medium">{title}</p>
 
         {contact.location && (
           <p className="mt-1 text-gray-400 text-sm">{contact.location}</p>
@@ -52,7 +52,7 @@ export function HeroSection({ name, title, summary, contact, fileUrl, editMode =
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-4 py-2 bg-gray-800 hover:bg-blue-700 text-sm text-gray-300 hover:text-white rounded-lg transition-colors"
+                className="px-4 py-2 bg-gray-800 hover:bg-accent-700 text-sm text-gray-300 hover:text-white rounded-lg transition-colors"
               >
                 {link.label}
               </a>
@@ -63,14 +63,14 @@ export function HeroSection({ name, title, summary, contact, fileUrl, editMode =
                 download
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-4 py-2 bg-blue-700 hover:bg-blue-600 text-sm text-white rounded-lg transition-colors"
+                className="px-4 py-2 bg-accent-700 hover:bg-accent-600 text-sm text-white rounded-lg transition-colors"
               >
                 View Resume <ExternalLink className={"inline-block"} size={16} />
               </a>
             )}
             <a
                 href="/about-me"
-                className="px-4 py-2 bg-blue-700 hover:bg-blue-600 text-sm text-white rounded-lg transition-colors"
+                className="px-4 py-2 bg-accent-700 hover:bg-accent-600 text-sm text-white rounded-lg transition-colors"
             >
               About Me
             </a>

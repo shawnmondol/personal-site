@@ -43,7 +43,7 @@ export function AboutMe() {
             <h2 className="text-2xl font-bold text-gray-800">Travel</h2>
             <div className="flex items-center gap-4 text-sm text-gray-500">
               <span className="flex items-center gap-1.5">
-                <span className="inline-block w-3 h-3 rounded-full bg-blue-500" />
+                <span className="inline-block w-3 h-3 rounded-full bg-accent-300 border border-accent-400" />
                 Visited
               </span>
               <span className="flex items-center gap-1.5">
@@ -104,7 +104,7 @@ export function AboutMe() {
         <footer className="text-center pb-10">
           <button
             onClick={() => setShowAdmin(true)}
-            className="text-sm text-gray-400 hover:text-blue-500 cursor-pointer transition-colors"
+            className="text-sm text-gray-400 hover:text-accent-500 cursor-pointer transition-colors"
           >
             Edit Travel
           </button>

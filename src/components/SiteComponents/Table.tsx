@@ -63,7 +63,7 @@ export function Table<T>({ data, columns }: { data?: T[], columns: ColumnDef<T, 
                         placeholder="Search resumes..."
                         value={globalFilter}
                         onChange={e => setGlobalFilter(e.target.value)}
-                        className="pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64"
+                        className="pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-accent-500 focus:border-transparent w-64"
                     />
                 </div>
                 <span className="text-sm text-gray-500">
@@ -109,7 +109,7 @@ export function Table<T>({ data, columns }: { data?: T[], columns: ColumnDef<T, 
                                     key={row.id}
                                     className={[
                                         i % 2 === 0 ? 'bg-white' : 'bg-gray-50/50',
-                                        'border-b border-gray-100 hover:bg-blue-50 transition-colors',
+                                        'border-b border-gray-100 hover:bg-accent-50 transition-colors',
                                     ].join(' ')}
                                 >
                                     {row.getVisibleCells().map(cell => (
@@ -161,7 +161,7 @@ export function Table<T>({ data, columns }: { data?: T[], columns: ColumnDef<T, 
                 <select
                     value={pageSize}
                     onChange={e => table.setPageSize(Number(e.target.value))}
-                    className="border border-gray-200 rounded-lg px-2 py-1 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="border border-gray-200 rounded-lg px-2 py-1 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-accent-500"
                 >
                     {[5, 10, 25, 50].map(size => (
                         <option key={size} value={size}>Show {size}</option>

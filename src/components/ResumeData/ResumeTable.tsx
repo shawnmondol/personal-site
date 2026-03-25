@@ -37,7 +37,7 @@ const columns: ColumnDef<ResumeData, any>[] = [
                         href={info.row.original.fileUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex text-blue-500 hover:text-blue-700"
+                        className="flex text-accent-500 hover:text-accent-700"
                     >
                         {info.getValue()}
                         <ExternalLink className="ml-1 h-5 w-5"/>
@@ -54,7 +54,7 @@ const columns: ColumnDef<ResumeData, any>[] = [
             return (
                 <Link
                     to={`/resume/${info.row.original.guid}/edit`}
-                    className={"flex text-blue-500 hover:text-blue-700"}
+                    className={"flex text-accent-500 hover:text-accent-700"}
                 >
                     Content
                     <ExternalLink className="ml-1 h-5 w-5"/>

@@ -19,7 +19,7 @@ export function TravelCard({ location }: Props) {
       {location.images?.[0] ? (
         <img src={location.images[0]} alt={location.city} className="w-full h-32 object-cover" />
       ) : (
-        <div className="w-full h-32 bg-linear-to-br from-blue-100 to-blue-200" />
+        <div className="w-full h-32 bg-linear-to-br from-accent-100 to-accent-200" />
       )}
       <div className="px-3 py-2">
         <p className="font-semibold text-sm text-gray-800">{location.city}</p>

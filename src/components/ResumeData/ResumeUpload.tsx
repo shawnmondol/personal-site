@@ -63,7 +63,7 @@ export function ResumeUpload() {
                     onDrop={onDrop}
                     className={`
             border-2 border-dashed rounded-2xl p-12 text-center cursor-pointer transition-colors
-            ${dragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-blue-400 hover:bg-gray-100'}
+            ${dragging ? 'border-accent-500 bg-accent-50' : 'border-gray-300 hover:border-accent-400 hover:bg-gray-100'}
             ${isLoading ? 'pointer-events-none opacity-60' : ''}
           `}
                 >
@@ -77,7 +77,7 @@ export function ResumeUpload() {
 
                     {isLoading ? (
                         <div className="space-y-3">
-                            <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto" />
+                            <div className="w-10 h-10 border-4 border-accent-500 border-t-transparent rounded-full animate-spin mx-auto" />
                             <p className="text-gray-600 font-medium">
                                 {status === 'extracting' ? 'Extracting text from PDF...' : 'Parsing with AI...'}
                             </p>

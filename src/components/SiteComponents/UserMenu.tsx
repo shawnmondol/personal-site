@@ -40,7 +40,7 @@ export function UserMenu({user, logout}: { user: User, logout: () => Promise<voi
             <div
                 className={dropdownClass}>
                 <button
-                    className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-blue-600 hover:text-white cursor-pointer rounded-lg"
+                    className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-accent-600 hover:text-white cursor-pointer rounded-lg"
                     onClick={logout}>
                     Logout
                 </button>
