@@ -2,6 +2,7 @@ import type { ResumeDisplayData} from '../../models/Resume.ts'
 import {PopupModal} from "../SiteComponents/PopupModal.tsx";
 import {useState} from "react";
 import {EditHeroSectionForm} from "../ResumeEditForms/EditHeroSectionForm.tsx";
+import { ExternalLink} from "lucide-react";
 
 interface Props {
   name: ResumeDisplayData['name']
@@ -64,7 +65,7 @@ export function HeroSection({ name, title, summary, contact, fileUrl, editMode =
                 rel="noopener noreferrer"
                 className="px-4 py-2 bg-blue-700 hover:bg-blue-600 text-sm text-white rounded-lg transition-colors"
               >
-                View Resume
+                View Resume <ExternalLink className={"inline-block"} size={16} />
               </a>
             )}
             <a

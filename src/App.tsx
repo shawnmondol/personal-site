@@ -1,6 +1,7 @@
 import {BrowserRouter, Routes, Route, Navigate, Outlet} from 'react-router-dom'
 import { ResumeProvider } from './context/ResumeContext'
 import { AuthProvider } from './context/AuthContext'
+import { ThemeProvider } from './context/ThemeContext'
 import { ResumePage } from './pages/ResumePage'
 import {Header} from "./components/SiteComponents/Header.tsx"
 import { Toaster } from 'sonner'
@@ -32,13 +33,15 @@ function AppRoutes() {
 function App() {
   return (
     <BrowserRouter>
-        <AuthProvider>
-            <Header />
-            <ResumeProvider>
-                <AppRoutes />
-            </ResumeProvider>
-            <Toaster />
-        </AuthProvider>
+        <ThemeProvider>
+            <AuthProvider>
+                <Header />
+                <ResumeProvider>
+                    <AppRoutes />
+                </ResumeProvider>
+                <Toaster />
+            </AuthProvider>
+        </ThemeProvider>
     </BrowserRouter>
   )
 }

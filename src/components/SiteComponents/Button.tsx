@@ -7,8 +7,8 @@ interface ButtonProps {
 
 const styles = {
     button: [
-        "border-1 bg-amber-600 border-amber-400 shadow-xl",
-        "hover:bg-amber-400 cursor-pointer",
+        "border-1 bg-blue-400 border-blue-600 shadow-xl",
+        "hover:bg-blue-600 cursor-pointer",
         "font-bold py-2 px-4 rounded-xl transition-transform",
         "active:scale-95 active:shadow-sm",
         "text-white"
