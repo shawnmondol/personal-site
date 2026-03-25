@@ -1,15 +1,15 @@
 import {useNavigate, useParams} from "react-router-dom";
-import type {ResumeDisplayData} from "../models/Resume.ts";
+import type {ResumeDisplayData} from "../../models/Resume.ts";
 import {useEffect, useState} from "react";
-import {Loading} from "../components/SiteComponents/Loading.tsx";
-import {getResume} from "../services/resume/firestoreResumeService.ts";
-import {Button} from "../components/SiteComponents/Button.tsx";
+import {Loading} from "../../components/SiteComponents/Loading.tsx";
+import {getResume} from "../../services/resume/firestoreResumeService.ts";
+import {Button} from "../../components/SiteComponents/Button.tsx";
 import {MoveLeft} from "lucide-react";
-import {HeroSection} from "../components/ResumeDisplay/HeroSection.tsx";
-import {ExperienceSection} from "../components/ResumeDisplay/ExperienceSection.tsx";
-import {SkillsSection} from "../components/ResumeDisplay/SkillsSection.tsx";
-import {ProjectsSection} from "../components/ResumeDisplay/ProjectsSection.tsx";
-import {EducationSection} from "../components/ResumeDisplay/EducationSection.tsx";
+import {HeroSection} from "../../components/ResumeDisplay/HeroSection.tsx";
+import {ExperienceSection} from "../../components/ResumeDisplay/ExperienceSection.tsx";
+import {SkillsSection} from "../../components/ResumeDisplay/SkillsSection.tsx";
+import {ProjectsSection} from "../../components/ResumeDisplay/ProjectsSection.tsx";
+import {EducationSection} from "../../components/ResumeDisplay/EducationSection.tsx";
 
 
 export function EditResumePage() {

@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react'
-import { useAuth } from '../context/AuthContext'
-import { getAboutData } from '../services/about/firestoreAboutService'
-import { TravelMap } from '../components/About/TravelMap'
-import { TravelAdminModal } from '../components/About/TravelAdminModal'
-import { TravelCard } from '../components/About/TravelCard'
-import { Loading } from '../components/SiteComponents/Loading'
-import type { AboutData } from '../models/About'
+import { useAuth } from '../../context/AuthContext.tsx'
+import { getAboutData } from '../../services/about/firestoreAboutService.ts'
+import { TravelMap } from '../../components/About/TravelMap.tsx'
+import { TravelAdminModal } from '../../components/About/TravelAdminModal.tsx'
+import { TravelCard } from '../../components/About/TravelCard.tsx'
+import { Loading } from '../../components/SiteComponents/Loading.tsx'
+import type { AboutData } from '../../models/About.ts'
 
 const EMPTY: AboutData = { hobbies: [], visited: [], wishlist: [] }
 
-export function AboutMe() {
+export function AboutMePage() {
   const { user } = useAuth()
   const isAdmin = user?.uid === import.meta.env.VITE_ADMIN_UID
 

@@ -1,14 +1,14 @@
 import {useNavigate} from 'react-router-dom'
-import {useResume} from '../context/ResumeContext'
-import {useAuth} from '../context/AuthContext'
-import {HeroSection} from '../components/ResumeDisplay/HeroSection'
-import {ExperienceSection} from '../components/ResumeDisplay/ExperienceSection'
-import {SkillsSection} from '../components/ResumeDisplay/SkillsSection'
-import {EducationSection} from '../components/ResumeDisplay/EducationSection'
-import {ProjectsSection} from '../components/ResumeDisplay/ProjectsSection'
+import {useResume} from '../../context/ResumeContext.tsx'
+import {useAuth} from '../../context/AuthContext.tsx'
+import {HeroSection} from '../../components/ResumeDisplay/HeroSection.tsx'
+import {ExperienceSection} from '../../components/ResumeDisplay/ExperienceSection.tsx'
+import {SkillsSection} from '../../components/ResumeDisplay/SkillsSection.tsx'
+import {EducationSection} from '../../components/ResumeDisplay/EducationSection.tsx'
+import {ProjectsSection} from '../../components/ResumeDisplay/ProjectsSection.tsx'
 import {useEffect} from "react";
-import {getActiveResume} from "../services/resume/firestoreResumeService.ts";
-import {Loading} from "../components/SiteComponents/Loading.tsx";
+import {getActiveResume} from "../../services/resume/firestoreResumeService.ts";
+import {Loading} from "../../components/SiteComponents/Loading.tsx";
 
 export function ResumePage() {
     const {resume, loadResume} = useResume()
