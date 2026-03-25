@@ -28,8 +28,8 @@ export function UserMenu({user, logout}: { user: User, logout: () => Promise<voi
     return (
         <div>
             <div
-                className="ml-4 w-12 h-12 rounded-full border border-amber-400
-                bg-amber-600 cursor-pointer
+                className="ml-4 w-12 h-12 rounded-full border border-accent-500
+                bg-accent-400 cursor-pointer
                 flex items-center justify-center overflow-hidden">
                 <img src={user.photoURL ?? undefined}
                      alt="Profile"

@@ -21,9 +21,9 @@ export function Header() {
 
 
     return (
-        <header className="w-full h-20 bg-linear-to-r from-orange-300 via-red-400 to-accent-500 shadow-2xl">
+        <header className="w-full h-20 bg-linear-to-r from-orange-300 via-red-400 to-accent-500 shadow-2xl relative z-10">
             <div className="flex justify-end items-center px-4 h-full">
-                <ThemePicker className={"absolute left-0 "}/>
+                <ThemePicker className={"hidden md:flex absolute left-0"}/>
                 <div className="absolute left-1/2 translate-x-[-50%]">
                     <Link to={"/"} className={"font-semibold text-3xl"}>
                         Portfolio
