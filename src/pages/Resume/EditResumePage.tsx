@@ -5,11 +5,11 @@ import {Loading} from "../../components/SiteComponents/Loading.tsx";
 import {getResume} from "../../services/resume/firestoreResumeService.ts";
 import {Button} from "../../components/SiteComponents/Button.tsx";
 import {MoveLeft} from "lucide-react";
-import {HeroSection} from "../../components/ResumeDisplay/HeroSection.tsx";
-import {ExperienceSection} from "../../components/ResumeDisplay/ExperienceSection.tsx";
-import {SkillsSection} from "../../components/ResumeDisplay/SkillsSection.tsx";
-import {ProjectsSection} from "../../components/ResumeDisplay/ProjectsSection.tsx";
-import {EducationSection} from "../../components/ResumeDisplay/EducationSection.tsx";
+import {HeroSection} from "../../components/Resume/ResumeDisplay/HeroSection.tsx";
+import {ExperienceSection} from "../../components/Resume/ResumeDisplay/ExperienceSection.tsx";
+import {SkillsSection} from "../../components/Resume/ResumeDisplay/SkillsSection.tsx";
+import {ProjectsSection} from "../../components/Resume/ResumeDisplay/ProjectsSection.tsx";
+import {EducationSection} from "../../components/Resume/ResumeDisplay/EducationSection.tsx";
 
 
 export function EditResumePage() {

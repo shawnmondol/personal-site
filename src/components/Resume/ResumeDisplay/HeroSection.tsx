@@ -1,5 +1,5 @@
-import type { ResumeDisplayData} from '../../models/Resume.ts'
-import {PopupModal} from "../SiteComponents/PopupModal.tsx";
+import type { ResumeDisplayData} from '../../../models/Resume.ts'
+import {PopupModal} from "../../SiteComponents/PopupModal.tsx";
 import {useState} from "react";
 import {EditHeroSectionForm} from "../ResumeEditForms/EditHeroSectionForm.tsx";
 import { ExternalLink} from "lucide-react";

@@ -1,4 +1,4 @@
-import type { SkillCategory } from '../../models/Resume.ts'
+import type { SkillCategory } from '../../../models/Resume.ts'
 import {useState} from "react";
 import {AnimatePresence, motion} from "framer-motion";
 

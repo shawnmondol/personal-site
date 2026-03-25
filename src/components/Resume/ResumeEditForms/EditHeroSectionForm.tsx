@@ -1,6 +1,6 @@
 import {useState} from "react";
-import type {ContactInfo, ResumeDisplayData} from "../../models/Resume.ts";
-import {Button} from "../SiteComponents/Button.tsx";
+import type {ContactInfo, ResumeDisplayData} from "../../../models/Resume.ts";
+import {Button} from "../../SiteComponents/Button.tsx";
 
 interface EditFormProps {
     name: string

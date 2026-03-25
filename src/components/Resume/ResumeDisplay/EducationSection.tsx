@@ -1,5 +1,5 @@
-import type { Education } from '../../models/Resume.ts'
-import {Button} from "../SiteComponents/Button.tsx";
+import type { Education } from '../../../models/Resume.ts'
+import {Button} from "../../SiteComponents/Button.tsx";
 
 interface Props {
     education: Education[]

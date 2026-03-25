@@ -1,5 +1,5 @@
-import type { Experience } from '../../models/Resume.ts'
-import {PopupModal} from "../SiteComponents/PopupModal.tsx";
+import type { Experience } from '../../../models/Resume.ts'
+import {PopupModal} from "../../SiteComponents/PopupModal.tsx";
 import {useState} from "react";
 import {EditExperienceSectionForm} from "../ResumeEditForms/EditExperienceSectionForm.tsx";
 

@@ -1,6 +1,6 @@
 import {useState} from "react";
-import type {Education} from "../../models/Resume.ts";
-import {Button} from "../SiteComponents/Button.tsx";
+import type {Education} from "../../../models/Resume.ts";
+import {Button} from "../../SiteComponents/Button.tsx";
 
 interface EditFormProps {
     education: Education[]

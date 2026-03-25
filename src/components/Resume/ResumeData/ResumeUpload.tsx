@@ -1,8 +1,8 @@
-import {useResume} from "../../context/ResumeContext.tsx";
+import {useResume} from "../../../context/ResumeContext.tsx";
 import {useNavigate} from "react-router-dom";
 import {useRef, useState} from "react";
-import {extractPdfText} from "../../services/resume/extractPdfText.ts";
-import {parseResumeWithAI} from "../../services/resume/parseResume.ts";
+import {extractPdfText} from "../../../services/resume/extractPdfText.ts";
+import {parseResumeWithAI} from "../../../services/resume/parseResume.ts";
 import {toast} from "sonner";
 
 type Status = 'idle' | 'extracting' | 'parsing' | 'error'

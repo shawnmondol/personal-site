@@ -1,8 +1,8 @@
-import type { ResumeData } from "../../models/Resume.ts";
+import type { ResumeData } from "../../../models/Resume.ts";
 import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
-import {Table} from "../SiteComponents/Table.tsx";
-import {Button} from "../SiteComponents/Button.tsx";
-import {setActiveResume} from "../../services/resume/firestoreResumeService.ts";
+import {Table} from "../../SiteComponents/Table.tsx";
+import {Button} from "../../SiteComponents/Button.tsx";
+import {setActiveResume} from "../../../services/resume/firestoreResumeService.ts";
 import {Timestamp} from "firebase/firestore";
 import {toast} from "sonner";
 import {Link} from "react-router-dom";

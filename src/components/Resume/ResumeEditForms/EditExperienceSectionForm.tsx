@@ -1,6 +1,6 @@
 import {useState} from "react";
-import type {Experience} from "../../models/Resume.ts";
-import {Button} from "../SiteComponents/Button.tsx";
+import type {Experience} from "../../../models/Resume.ts";
+import {Button} from "../../SiteComponents/Button.tsx";
 
 interface EditFormProps {
     experience: Experience
