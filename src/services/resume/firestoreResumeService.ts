@@ -28,9 +28,20 @@ export async function saveResume(resume: ResumeData) {
     await setDoc(resumeRef, resume);
 }
 
+/** Firestore rejects `undefined`, which optional resume fields (gpa, link, phone) hit easily. */
+function stripUndefined<T>(value: T): T {
+    if (Array.isArray(value)) return value.map(stripUndefined) as T
+    if (value instanceof Date || value === null || typeof value !== 'object') return value
+    return Object.fromEntries(
+        Object.entries(value as Record<string, unknown>)
+            .filter(([, v]) => v !== undefined)
+            .map(([k, v]) => [k, stripUndefined(v)])
+    ) as T
+}
+
 export async function updateResume(guid: string, updates: Partial<ResumeData>) {
     const resumeRef = doc(db, RESUME_COLLECTION, guid);
-    await updateDoc(resumeRef, updates);
+    await updateDoc(resumeRef, stripUndefined(updates));
 }
 
 export async function setActiveResume(guid: string) {

@@ -1,91 +1,116 @@
-import type {Project, ResumeDisplayData} from '../../../models/Resume.ts'
-import {PopupModal} from "../../SiteComponents/PopupModal.tsx";
-import {useState} from "react";
-import {EditProjectsSectionForm} from "../ResumeEditForms/EditProjectsSectionForm.tsx";
+import type {Project} from '../../../models/Resume.ts'
+import {AnimatePresence, motion} from "framer-motion";
+import {InlineText} from "../ResumeEditForms/InlineText.tsx";
+import {InlineStringList} from "../ResumeEditForms/InlineStringList.tsx";
+import {AddEntryButton, EntryControls} from "../ResumeEditForms/EntryControls.tsx";
+import {moveItem, removeAt, updateAt} from "../ResumeEditForms/listUtils.ts";
 
 interface Props {
     projects: Project[]
     editMode?: boolean
-    onChange?: (updated: Pick<ResumeDisplayData, 'projects'>) => void
+    onChange?: (updated: Project[]) => void
 }
 
+const emptyProject: Project = {name: '', description: '', technologies: [], link: ''}
+
+const techChipClass = "px-2 py-0.5 bg-gray-100 text-gray-600 text-xs rounded-md"
+
 export function ProjectsSection({ projects, editMode = false, onChange }: Props) {
-  const [editingProject, setEditingProject] = useState<Project | null>(null)
-  const [editingIndex, setEditingIndex] = useState<number | null>(null)
-
-  function handleEdit(project: Project, index: number) {
-    setEditingProject(project)
-    setEditingIndex(index)
-  }
-
-  function handleAdd() {
-    setEditingProject({ name: '', description: '', technologies: [] })
-    setEditingIndex(null)
-  }
-
-  function handleSave(updated: Project) {
-    if (editingIndex === null) {
-      onChange?.({ projects: [...projects, updated] })
-    } else {
-      onChange?.({ projects: projects.map((p, i) => i === editingIndex ? updated : p) })
-    }
-    setEditingProject(null)
-    setEditingIndex(null)
-  }
-
   if (!projects.length && !editMode) return null
+
+  function update(index: number, project: Project) {
+    onChange?.(updateAt(projects, index, project))
+  }
 
   return (
     <section>
       <h2 className="text-2xl font-bold text-gray-800 mb-6">Projects</h2>
       <div className="grid gap-4 sm:grid-cols-2">
-        {projects.map((project, i) => (
-          <div key={i}
-               className={`border border-gray-200 rounded-xl p-5 hover:shadow-md transition-shadow
-               ${editMode ? "cursor-pointer" : ""}`}
-               onClick={editMode ? () => handleEdit(project, i) : undefined}
-          >
-            <div className="flex items-start justify-between gap-2">
-              <h3 className="font-semibold text-gray-800">{project.name}</h3>
-              {project.link && (
-                <a
-                  href={project.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-accent-500 hover:text-accent-700 text-sm shrink-0"
-                >
-                  ↗ Link
-                </a>
+        <AnimatePresence initial={false}>
+          {projects.map((project, i) => (
+            <motion.div
+              key={i}
+              initial={{opacity: 0, scale: 0.97}}
+              animate={{opacity: 1, scale: 1}}
+              exit={{opacity: 0, scale: 0.97}}
+              transition={{duration: 0.15}}
+              className="group border border-gray-200 rounded-xl p-5 hover:shadow-md transition-shadow"
+            >
+              <div className="flex items-start justify-between gap-2">
+                <InlineText
+                  as="h3"
+                  value={project.name}
+                  editMode={editMode}
+                  placeholder="Project name"
+                  ariaLabel="Project name"
+                  className="block font-semibold text-gray-800 flex-1"
+                  onChange={value => update(i, {...project, name: value})}
+                />
+                {editMode ? (
+                  <EntryControls
+                    index={i}
+                    total={projects.length}
+                    label="project"
+                    className="shrink-0 -mt-1"
+                    onMove={to => onChange?.(moveItem(projects, i, to))}
+                    onRemove={() => onChange?.(removeAt(projects, i))}
+                  />
+                ) : project.link && (
+                  <a
+                    href={project.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-accent-500 hover:text-accent-700 text-sm shrink-0"
+                  >
+                    ↗ Link
+                  </a>
+                )}
+              </div>
+
+              <InlineText
+                as="p"
+                value={project.description}
+                editMode={editMode}
+                multiline
+                rows={3}
+                placeholder="What is this project?"
+                ariaLabel="Project description"
+                className="block mt-2 text-sm text-gray-600 leading-relaxed"
+                onChange={value => update(i, {...project, description: value})}
+              />
+
+              <InlineStringList
+                items={project.technologies}
+                editMode={editMode}
+                chipClassName={techChipClass}
+                addLabel="Tech"
+                placeholder="Technology"
+                className="mt-3"
+                onChange={technologies => update(i, {...project, technologies})}
+              />
+
+              {editMode && (
+                <div className="mt-3 flex items-baseline gap-2 text-sm">
+                  <span className="text-gray-400 text-xs uppercase tracking-wider shrink-0">Link</span>
+                  <InlineText
+                    value={project.link ?? ''}
+                    editMode
+                    placeholder="https://…"
+                    ariaLabel="Project link"
+                    className="text-accent-600 flex-1 truncate"
+                    onChange={value => update(i, {...project, link: value})}
+                  />
+                </div>
               )}
-            </div>
-            <p className="mt-2 text-sm text-gray-600 leading-relaxed">{project.description}</p>
-            <div className="mt-3 flex flex-wrap gap-1.5">
-              {project.technologies.map((tech, j) => (
-                <span
-                  key={j}
-                  className="px-2 py-0.5 bg-gray-100 text-gray-600 text-xs rounded-md"
-                >
-                  {tech}
-                </span>
-              ))}
-            </div>
-          </div>
-        ))}
+            </motion.div>
+          ))}
+        </AnimatePresence>
       </div>
       {editMode && (
-        <button onClick={handleAdd} className="mt-4 text-sm text-accent-500 hover:text-accent-700 cursor-pointer transition-colors">
-          + Add Project
-        </button>
+        <AddEntryButton className="mt-4" onClick={() => onChange?.([...projects, {...emptyProject}])}>
+          Add Project
+        </AddEntryButton>
       )}
-        <PopupModal isOpen={editingProject !== null} onClose={() => setEditingProject(null)}>
-            <h2 className="text-xl font-bold mb-6">{editingIndex === null ? 'Add Project' : 'Edit Project'}</h2>
-            {editingProject && (
-                <EditProjectsSectionForm
-                    project={editingProject}
-                    onSave={handleSave}
-                />
-            )}
-        </PopupModal>
     </section>
   )
 }
