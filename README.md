@@ -20,18 +20,25 @@ src/
   App.tsx                 # Routes + provider tree (Theme → Auth → Resume)
   main.tsx
   components/
-    Resume/               # Resume display, data table, upload, and edit forms
+    Resume/
+      ResumeDisplay/      # Resume sections, inline-editable when editMode is set
+      ResumeEditForms/    # Inline editing primitives (InlineText, InlineStringList,
+                          # EntryControls, listUtils) shared across the site
+      ResumeData/         # Admin table and PDF upload
+    Projects/             # ProjectBody — the content-block renderer/editor
     About/                # Travel cards, gallery modal, and map (Leaflet)
     SiteComponents/       # Header, buttons, modals, theme picker, admin auth gate
   context/                # AuthContext, ResumeContext, ThemeContext
   pages/
     Resume/               # ResumePage, ResumeDataPage, EditResumePage
+    Projects/             # ProjectsPage (index), ProjectDetailPage (case study + CMS)
     AboutMe/              # AboutMePage
   services/
     auth/                 # Firebase app init + user auth
     resume/               # PDF text extraction, Firestore CRUD, callable to parseResume
+    projects/             # Firestore CRUD + Storage image upload for projects
     about/                # Firestore CRUD for the About/travel content
-  models/                 # Resume, About, and theme type definitions
+  models/                 # Resume, Project, About, and theme type definitions
 
 functions/
   src/index.ts            # parseResume callable — sends resume text to Claude,
@@ -40,14 +47,28 @@ functions/
 
 ## Routes
 
-| Path                  | Access      | Description                              |
-| --------------------- | ----------- | ---------------------------------------- |
-| `/`, `/resume`        | Public      | Rendered resume / portfolio              |
-| `/about-me`           | Public      | About page with interactive travel map   |
-| `/resume/data`        | Admin only  | Manage resume records                    |
-| `/resume/:guid/edit`  | Admin only  | Edit a resume's sections                  |
+| Path                  | Access      | Description                                        |
+| --------------------- | ----------- | -------------------------------------------------- |
+| `/`, `/resume`        | Public      | Rendered resume / portfolio                        |
+| `/about-me`           | Public      | About page with interactive travel map             |
+| `/projects`           | Public      | Project index — published only; admins also see drafts |
+| `/projects/:id`       | Public      | Project write-up; edits inline when signed in as admin |
+| `/resume/data`        | Admin only  | Manage resume records                              |
+| `/resume/:guid/edit`  | Admin only  | Edit a resume's sections inline                    |
 
-Admin routes are gated by `AdminAuth`, which checks the signed-in user's UID against `VITE_ADMIN_UID`.
+`/resume/*` admin routes are gated by `AdminAuth`, which checks the signed-in user's UID against `VITE_ADMIN_UID`. The project routes are public pages that reveal editing in place for that same UID.
+
+## Projects CMS
+
+`/projects` is a small CMS for writing up work whose source isn't public. Each project is a doc in the `projects` collection, keyed by a slug derived from its title:
+
+- **Draft / published** — projects stay invisible to visitors until published; admins see drafts with a badge.
+- **Content blocks** — the write-up is an ordered list of typed blocks (`heading`, `paragraph`, `list`, `image`, `code`) that can be added, reordered, and deleted, so screenshots sit inline with the text explaining them. Images upload to Storage under `projects/<projectId>/`.
+- **Optional link** — projects with no public repo simply render no link.
+
+Editing happens in place on the real page, using the same inline primitives as the resume editor, with a sticky save bar tracking unsaved changes.
+
+> **Firestore/Storage rules:** this repo doesn't check in security rules, so they're managed in the Firebase console. The `projects` collection needs public read and admin-only write, and Storage needs the same for the `projects/` path.
 
 ## Getting started
 

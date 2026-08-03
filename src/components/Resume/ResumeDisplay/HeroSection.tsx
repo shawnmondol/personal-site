@@ -129,6 +129,12 @@ export function HeroSection({ name, title, summary, contact, fileUrl, editMode =
               </a>
             )}
             <a
+                href="/projects"
+                className="px-4 py-2 bg-accent-700 hover:bg-accent-600 text-sm text-white rounded-lg transition-colors"
+            >
+              Projects
+            </a>
+            <a
                 href="/about-me"
                 className="px-4 py-2 bg-accent-700 hover:bg-accent-600 text-sm text-white rounded-lg transition-colors"
             >

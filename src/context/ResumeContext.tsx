@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, type ReactNode } from 'react'
 import type {ResumeData, ResumeDisplayData} from '../models/Resume.ts'
-import {saveResume, uploadResumePdf} from "../services/resume/firestoreResumeService.ts";
+import {saveResumeAsActive, uploadResumePdf} from "../services/resume/firestoreResumeService.ts";
 
 interface ResumeContextValue {
   resume: ResumeData | null
@@ -25,7 +25,8 @@ export function ResumeProvider({ children }: { children: ReactNode }) {
       fileUrl,
       isActive: true
     }
-    await saveResume(resumeData)
+    // Deactivates any previously active resume in the same commit.
+    await saveResumeAsActive(resumeData)
     setResumeState(resumeData)
   }
 

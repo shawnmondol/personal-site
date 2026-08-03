@@ -7,7 +7,9 @@ import {
     getDoc,
     getDocs,
     setDoc,
-    updateDoc
+    updateDoc,
+    writeBatch,
+    type WriteBatch
 } from "firebase/firestore";
 import {app, db} from "../auth/firebaseService";
 import type {ResumeData} from "../../models/Resume";
@@ -25,7 +27,28 @@ export async function uploadResumePdf(file: File, guid: string) {
 
 export async function saveResume(resume: ResumeData) {
     const resumeRef = doc(db, RESUME_COLLECTION, resume.guid);
-    await setDoc(resumeRef, resume);
+    await setDoc(resumeRef, stripUndefined(resume));
+}
+
+/**
+ * Queues a deactivation for every active resume except `exceptGuid`.
+ * Deliberately unbounded — if the collection already has several actives, this
+ * clears all of them rather than leaving stale ones behind.
+ */
+async function queueDeactivateOthers(batch: WriteBatch, exceptGuid: string) {
+    const q = query(collection(db, RESUME_COLLECTION), where('isActive', '==', true))
+    const snap = await getDocs(q)
+    snap.docs
+        .filter(d => d.id !== exceptGuid)
+        .forEach(d => batch.update(d.ref, {isActive: false}))
+}
+
+/** Saves a new resume and makes it the only active one in a single atomic commit. */
+export async function saveResumeAsActive(resume: ResumeData) {
+    const batch = writeBatch(db)
+    await queueDeactivateOthers(batch, resume.guid)
+    batch.set(doc(db, RESUME_COLLECTION, resume.guid), stripUndefined({...resume, isActive: true}))
+    await batch.commit()
 }
 
 /** Firestore rejects `undefined`, which optional resume fields (gpa, link, phone) hit easily. */
@@ -45,12 +68,10 @@ export async function updateResume(guid: string, updates: Partial<ResumeData>) {
 }
 
 export async function setActiveResume(guid: string) {
-    const q = query(collection(db, RESUME_COLLECTION), where('isActive', '==', true), limit(1))
-    const snap = await getDocs(q)
-    if (!snap.empty) {
-        await updateResume(snap.docs[0].id, {isActive: false})
-    }
-    await updateResume(guid, {isActive: true})
+    const batch = writeBatch(db)
+    await queueDeactivateOthers(batch, guid)
+    batch.update(doc(db, RESUME_COLLECTION, guid), {isActive: true})
+    await batch.commit()
 }
 
 export async function getActiveResume(): Promise<ResumeData | null> {

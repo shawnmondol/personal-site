@@ -9,6 +9,8 @@ import {ResumeDataPage} from "./pages/Resume/ResumeDataPage.tsx"
 import {AdminAuth} from "./components/SiteComponents/AdminAuth.tsx"
 import {EditResumePage} from "./pages/Resume/EditResumePage.tsx"
 import {AboutMePage} from "./pages/AboutMe/AboutMePage.tsx"
+import {ProjectsPage} from "./pages/Projects/ProjectsPage.tsx"
+import {ProjectDetailPage} from "./pages/Projects/ProjectDetailPage.tsx"
 
 function AppRoutes() {
 
@@ -20,6 +22,8 @@ function AppRoutes() {
         <Route path={"/"} element={<ResumePage />} />
         <Route path={"/resume"} element={<ResumePage />} />
         <Route path={"/about-me"} element={<AboutMePage />} />
+        <Route path={"/projects"} element={<ProjectsPage />} />
+        <Route path={"/projects/:id"} element={<ProjectDetailPage />} />
 
         {/* Admin Routes */}
         <Route element={<AdminAuth adminOnly={true}><Outlet /></AdminAuth>}>
