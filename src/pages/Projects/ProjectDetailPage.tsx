@@ -1,10 +1,8 @@
 import {useEffect, useState} from "react";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {toast} from "sonner";
-import {ExternalLink, MoveLeft} from "lucide-react";
 import {useAuth} from "../../context/AuthContext.tsx";
 import {Loading} from "../../components/SiteComponents/Loading.tsx";
-import {Button} from "../../components/SiteComponents/Button.tsx";
 import {ProjectBody} from "../../components/Projects/ProjectBody.tsx";
 import {InlineText} from "../../components/Resume/ResumeEditForms/InlineText.tsx";
 import {InlineStringList} from "../../components/Resume/ResumeEditForms/InlineStringList.tsx";
@@ -49,9 +47,9 @@ export function ProjectDetailPage() {
 
     if (missing || (project && !project.published && !isAdmin)) {
         return (
-            <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center gap-4">
-                <p className="text-gray-500">That project isn't available.</p>
-                <Link to="/projects" className="text-accent-600 hover:text-accent-700">Back to projects</Link>
+            <div className="page-shell flex flex-col items-center justify-center gap-4 py-32">
+                <p className="text-muted">That project isn't available.</p>
+                <Link to="/projects">Back to projects</Link>
             </div>
         )
     }
@@ -90,80 +88,61 @@ export function ProjectDetailPage() {
         }
     }
 
-    function leave() {
-        if (isDirty && !confirm('You have unsaved changes. Leave without saving?')) return
-        navigate('/projects')
-    }
-
     return (
-        <div className="min-h-screen bg-gray-50">
+        <>
             {isAdmin && (
-                <div className="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-gray-200">
-                    <div className="max-w-3xl mx-auto px-6 py-3 flex flex-wrap items-center justify-between gap-3">
-                        <Button onClick={leave} className="flex items-center justify-center">
-                            <MoveLeft className="mr-2 h-4 w-4"/>
-                            All Projects
-                        </Button>
+                <div
+                    className="sticky top-[57px] z-20 border-b"
+                    style={{
+                        background: 'color-mix(in srgb, var(--color-bg) 92%, transparent)',
+                        backdropFilter: 'blur(10px)',
+                        borderColor: 'var(--color-divider)',
+                    }}
+                >
+                    <div className="page-shell flex flex-wrap items-center justify-between gap-3 py-3">
+                        <button
+                            onClick={() => patch({published: !project.published})}
+                            className={`tag ${project.published ? 'tag-accent' : 'tag-neutral'} cursor-pointer`}
+                            title={project.published ? 'Unpublish this project' : 'Publish this project'}
+                        >
+                            {project.published ? 'Published' : 'Draft'}
+                        </button>
                         <div className="flex items-center gap-3">
-                            <button
-                                onClick={() => patch({published: !project.published})}
-                                title={project.published ? 'Unpublish this project' : 'Publish this project'}
-                                className={`px-3 py-1 text-xs rounded-full border cursor-pointer transition-colors ${
-                                    project.published
-                                        ? 'bg-green-100 text-green-700 border-green-200 hover:bg-green-200'
-                                        : 'bg-amber-100 text-amber-700 border-amber-200 hover:bg-amber-200'
-                                }`}
-                            >
-                                {project.published ? 'Published' : 'Draft'}
-                            </button>
-                            <span className="text-sm text-gray-500">
+                            <span className="text-sm text-muted">
                                 {saving ? 'Saving…' : isDirty ? 'Unsaved changes' : 'All changes saved'}
                             </span>
-                            <button
-                                onClick={() => void remove()}
-                                className="text-sm text-gray-400 hover:text-red-500 cursor-pointer transition-colors"
-                            >
-                                Delete
-                            </button>
-                            <Button
-                                onClick={() => void save()}
-                                disabled={!isDirty || saving}
-                                className={!isDirty || saving ? 'opacity-50 pointer-events-none' : ''}
-                            >
+                            <button onClick={() => void remove()} className="btn btn-danger">Delete</button>
+                            <button onClick={() => void save()} disabled={!isDirty || saving} className="btn btn-primary">
                                 Save
-                            </Button>
+                            </button>
                         </div>
                     </div>
                 </div>
             )}
 
-            <section className="bg-gray-900 text-white py-16 px-6">
-                <div className="max-w-3xl mx-auto">
-                    {!isAdmin && (
-                        <Link to="/projects" className="text-sm text-gray-400 hover:text-white transition-colors">
-                            ← All projects
-                        </Link>
-                    )}
+            <div className="page-shell">
+                <section style={{padding: '48px 0 0'}}>
+                    <Link to="/projects" className="text-sm">← All projects</Link>
+
                     <InlineText
                         as="h1"
                         value={project.title}
                         editMode={isAdmin}
-                        tone="dark"
                         placeholder="Project title"
                         ariaLabel="Project title"
-                        className="block mt-3 text-4xl sm:text-5xl font-bold tracking-tight"
+                        className="block mt-4"
                         onChange={title => patch({title})}
                     />
+
                     <InlineText
                         as="p"
                         value={project.tagline}
                         editMode={isAdmin}
-                        tone="dark"
                         multiline
                         rows={2}
                         placeholder="One line on what this is"
                         ariaLabel="Tagline"
-                        className="block mt-3 text-lg text-gray-300 leading-relaxed max-w-2xl"
+                        className="block text-[17px] text-subtle mt-3 max-w-[60ch]"
                         onChange={tagline => patch({tagline})}
                     />
 
@@ -173,22 +152,21 @@ export function ProjectDetailPage() {
                             editMode={isAdmin}
                             addLabel="Tech"
                             placeholder="Technology"
-                            className="mt-5"
-                            chipClassName="px-3 py-1 bg-gray-800 text-gray-300 text-sm rounded-full border border-gray-700"
+                            className="mt-4"
+                            chipClassName="tag tag-accent"
                             onChange={technologies => patch({technologies})}
                         />
                     )}
 
                     {isAdmin ? (
-                        <div className="mt-5 flex items-baseline gap-2 text-sm">
-                            <span className="text-gray-500 text-xs uppercase tracking-wider shrink-0">Link</span>
+                        <div className="flex items-baseline gap-2 text-sm mt-4">
+                            <span className="text-muted text-xs uppercase tracking-wider shrink-0">Link</span>
                             <InlineText
                                 value={project.link ?? ''}
                                 editMode
-                                tone="dark"
                                 placeholder="Leave blank for private projects"
                                 ariaLabel="Project link"
-                                className="text-accent-400 flex-1 truncate"
+                                className="text-accent-300 flex-1 truncate"
                                 onChange={link => patch({link})}
                             />
                         </div>
@@ -197,22 +175,22 @@ export function ProjectDetailPage() {
                             href={project.link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="mt-5 inline-flex items-center gap-1.5 px-4 py-2 bg-accent-700 hover:bg-accent-600 text-sm text-white rounded-lg transition-colors"
+                            className="btn btn-primary mt-[18px] inline-flex"
                         >
-                            View Project <ExternalLink size={16}/>
+                            View project ↗
                         </a>
                     )}
-                </div>
-            </section>
+                </section>
 
-            <main className="max-w-3xl mx-auto px-6 py-12">
-                <ProjectBody
-                    blocks={project.body}
-                    projectId={project.id}
-                    editMode={isAdmin}
-                    onChange={body => patch({body})}
-                />
-            </main>
-        </div>
+                <section className="max-w-[760px]" style={{padding: '48px 0 88px'}}>
+                    <ProjectBody
+                        blocks={project.body}
+                        projectId={project.id}
+                        editMode={isAdmin}
+                        onChange={body => patch({body})}
+                    />
+                </section>
+            </div>
+        </>
     )
 }

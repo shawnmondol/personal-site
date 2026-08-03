@@ -22,36 +22,32 @@ export function ResumePage() {
 
     if (!resume) return <Loading />
 
-    function handleEdit() {
-        navigate('/resume/data')
-    }
+    const data = resume.resumeDisplayData
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="page-shell">
             <HeroSection
-                name={resume.resumeDisplayData.name}
-                title={resume.resumeDisplayData.title}
-                summary={resume.resumeDisplayData.summary}
-                contact={resume.resumeDisplayData.contact}
+                name={data.name}
+                title={data.title}
+                summary={data.summary}
+                contact={data.contact}
                 fileUrl={resume.fileUrl}
             />
+            <ExperienceSection experience={data.experience}/>
+            <EducationSection education={data.education}/>
+            <SkillsSection skills={data.skills}/>
+            <ProjectsSection projects={data.projects}/>
 
-            <main className="max-w-3xl mx-auto px-6 py-12 space-y-14">
-                <ExperienceSection experience={resume.resumeDisplayData.experience}/>
-                <SkillsSection skills={resume.resumeDisplayData.skills}/>
-                <ProjectsSection projects={resume.resumeDisplayData.projects}/>
-                <EducationSection education={resume.resumeDisplayData.education}/>
-            </main>
-            { isAdmin &&
-                <footer className="text-center pb-10">
+            {isAdmin && (
+                <div className="pb-10 -mt-14">
                     <button
-                        onClick={handleEdit}
-                        className="text-sm text-gray-400 hover:text-red-500 cursor-pointer transition-colors"
+                        onClick={() => navigate('/resume/data')}
+                        className="text-sm text-muted hover:text-accent-400 cursor-pointer transition-colors"
                     >
                         Edit Content
                     </button>
-                </footer>
-            }
+                </div>
+            )}
         </div>
     )
 }

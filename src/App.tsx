@@ -11,6 +11,7 @@ import {EditResumePage} from "./pages/Resume/EditResumePage.tsx"
 import {AboutMePage} from "./pages/AboutMe/AboutMePage.tsx"
 import {ProjectsPage} from "./pages/Projects/ProjectsPage.tsx"
 import {ProjectDetailPage} from "./pages/Projects/ProjectDetailPage.tsx"
+import {Footer} from "./components/SiteComponents/Footer.tsx"
 
 function AppRoutes() {
 
@@ -39,11 +40,16 @@ function App() {
     <BrowserRouter>
         <ThemeProvider>
             <AuthProvider>
-                <Header />
-                <ResumeProvider>
-                    <AppRoutes />
-                </ResumeProvider>
-                <Toaster />
+                <div className="min-h-screen flex flex-col">
+                    <Header />
+                    <ResumeProvider>
+                        <div className="flex-1">
+                            <AppRoutes />
+                        </div>
+                    </ResumeProvider>
+                    <Footer />
+                </div>
+                <Toaster theme="dark" />
             </AuthProvider>
         </ThemeProvider>
     </BrowserRouter>

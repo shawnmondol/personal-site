@@ -1,84 +1,94 @@
-import { Link } from "react-router-dom"
+import {NavLink, useLocation, useNavigate} from "react-router-dom"
 import {UserMenu} from "./UserMenu.tsx"
-import { useAuth } from "../../context/AuthContext.tsx"
-import githubIcon from '/github.svg'
-import linkedinIcon from '/linkedin.png'
-import gitlabIcon from '/gitlab.svg'
+import {useAuth} from "../../context/AuthContext.tsx"
+import {ThemePicker} from "./ThemePicker.tsx"
 import {useState} from "react"
-import {Button} from "./Button.tsx"
-import {Menu} from "lucide-react"
-import {ThemePicker} from "./ThemePicker.tsx";
+import {Menu, X} from "lucide-react"
 
+const links = [
+    {label: 'Resume', to: '/'},
+    {label: 'Projects', to: '/projects'},
+    {label: 'About Me', to: '/about-me'},
+]
 
 export function Header() {
-    const { user, loading, login, logout } = useAuth();
-    const [ hamburgerOpen, setHamburgerOpen ]  = useState(false);
-    const links = [
-        { label: 'GitHub', href: import.meta.env.VITE_GITHUB, image: githubIcon },
-        { label: 'LinkedIn', href: import.meta.env.VITE_LINKEDIN, image: linkedinIcon },
-        { label: 'GitLab', href: import.meta.env.VITE_GITLAB, image: gitlabIcon },
-    ] as { label: string; href: string; image: string }[]
+    const {user, loading, login, logout} = useAuth()
+    const [menuOpen, setMenuOpen] = useState(false)
+    const {pathname} = useLocation()
+    const navigate = useNavigate()
 
+    /** Project detail pages should keep "Projects" lit. */
+    function isActive(to: string) {
+        return to === '/' ? pathname === '/' || pathname.startsWith('/resume') : pathname.startsWith(to)
+    }
 
     return (
-        <header className="w-full h-20 bg-linear-to-r from-orange-300 via-red-400 to-accent-500 shadow-2xl relative z-10">
-            <div className="flex justify-end items-center px-4 h-full">
-                <ThemePicker className={"hidden md:flex absolute left-0"}/>
-                <div className="absolute left-1/2 translate-x-[-50%]">
-                    <Link to={"/"} className={"font-semibold text-3xl"}>
-                        Portfolio
-                    </Link>
-                </div>
-                {links.length > 0 && (
-                    <div>
-                        <Button
-                            className="md:hidden text-4xl absolute justify-center left-4 translate-y-[-50%]"
-                        onClick={() => setHamburgerOpen(state => !state)}
+        <header
+            className="sticky top-0 z-30 border-b"
+            style={{
+                background: 'color-mix(in srgb, var(--color-bg) 88%, transparent)',
+                backdropFilter: 'blur(10px)',
+                borderColor: 'var(--color-divider)',
+            }}
+        >
+            <nav className="nav">
+                <span className="nav-brand cursor-pointer" onClick={() => navigate('/')}>
+                    Shawn Mondol
+                </span>
+
+                <div className="hidden md:flex items-center gap-6">
+                    {links.map(link => (
+                        <NavLink
+                            key={link.to}
+                            to={link.to}
+                            className={`nav-link ${isActive(link.to) ? 'nav-link-active' : ''}`}
                         >
-                            <Menu />
-                        </Button>
-                        <div className="hidden md:flex flex-wrap gap-3">
-                            {links.map((link) => (
-                                <Button
-                                    key={link.href}
-                                    onClick={() => window.open(link.href, '_blank', 'noopener,noreferrer')}
-                                    className="px-2 py-2 text-sm"
-                                >
-                                    <img src={link.image} title={link.label} alt={link.label} width={30} height={30}/>
-                                </Button>
-                            ))}
-                        </div>
-                        <div className={`md:hidden flex w-full absolute top-20 left-0 shadow-lg p-4 
-                        transition-all duration-300 overflow-hidden 
-                        ${hamburgerOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}`}>
-                            {links.map((link) => (
-                                <Button
-                                    key={link.href}
-                                    onClick={() => window.open(link.href, '_blank', 'noopener,noreferrer')}
-                                    className="flex px-2 py-2 text-sm m-2"
-                                >
-                                    <div className="flex items-center">
-                                        <img src={link.image} title={link.label} alt={link.label} width={30} height={30}/>
-                                        <span className="ml-1">{link.label}</span>
-                                    </div>
-                                </Button>
-                            ))}
-                        </div>
-                    </div>
+                            {link.label}
+                        </NavLink>
+                    ))}
+                </div>
+
+                <ThemePicker className="hidden md:flex" />
+
+                {loading ? null : !user ? (
+                    <button type="button" className="btn btn-secondary" onClick={() => void login()}>
+                        Sign in
+                    </button>
+                ) : (
+                    <UserMenu user={user} logout={logout} />
                 )}
-                <div>
-                    {loading ? null : !user ? (
-                    <Button
-                        className="ml-4 px-4 py-2  text-sm"
-                        onClick={login}
-                    >
-                        Sign In
-                    </Button>
-                    ) :
-                    <UserMenu user={user} logout={logout}/>
-                    }
+
+                <button
+                    type="button"
+                    aria-label="Toggle navigation"
+                    onClick={() => setMenuOpen(open => !open)}
+                    className="md:hidden btn btn-secondary px-2"
+                >
+                    {menuOpen ? <X size={18} /> : <Menu size={18} />}
+                </button>
+            </nav>
+
+            {/* Mobile drawer */}
+            <div
+                className={`md:hidden overflow-hidden transition-all duration-300 ${
+                    menuOpen ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'
+                }`}
+                style={{borderTop: menuOpen ? '1px solid var(--color-divider)' : 'none'}}
+            >
+                <div className="page-shell flex flex-col gap-4 py-4">
+                    {links.map(link => (
+                        <NavLink
+                            key={link.to}
+                            to={link.to}
+                            onClick={() => setMenuOpen(false)}
+                            className={`nav-link ${isActive(link.to) ? 'nav-link-active' : ''}`}
+                        >
+                            {link.label}
+                        </NavLink>
+                    ))}
+                    <ThemePicker />
                 </div>
             </div>
         </header>
-    );
+    )
 }

@@ -3,7 +3,6 @@ import {Link, useNavigate} from "react-router-dom";
 import {toast} from "sonner";
 import {useAuth} from "../../context/AuthContext.tsx";
 import {Loading} from "../../components/SiteComponents/Loading.tsx";
-import {Button} from "../../components/SiteComponents/Button.tsx";
 import type {Project} from "../../models/Project.ts";
 import {createProject, getAllProjects, getPublishedProjects} from "../../services/projects/firestoreProjectService.ts";
 
@@ -42,73 +41,67 @@ export function ProjectsPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
-            <section className="bg-gray-900 text-white py-20 px-6">
-                <div className="max-w-4xl mx-auto">
-                    <h1 className="text-5xl font-bold tracking-tight">Projects</h1>
-                    <p className="mt-4 text-gray-300 leading-relaxed max-w-2xl">
-                        Things I've built — including the ones whose source I can't share.
-                    </p>
-                </div>
+        <div className="page-shell">
+            <section style={{padding: '80px 0 32px'}}>
+                <h1>Projects</h1>
+                <p className="text-subtle text-base leading-relaxed max-w-[56ch] mt-4">
+                    Things I've built — including the ones whose source I can't share.
+                </p>
             </section>
 
-            <main className="max-w-4xl mx-auto px-6 py-12">
-                {isAdmin && (
-                    <div className="mb-8 flex flex-wrap gap-3 items-center">
-                        <input
-                            value={title}
-                            onChange={e => setTitle(e.target.value)}
-                            onKeyDown={e => e.key === 'Enter' && void create()}
-                            placeholder="New project title…"
-                            className="flex-1 min-w-56 border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:border-accent-400"
-                        />
-                        <Button
-                            onClick={() => void create()}
-                            disabled={!title.trim() || creating}
-                            className={!title.trim() || creating ? 'opacity-50 pointer-events-none' : ''}
-                        >
-                            {creating ? 'Creating…' : 'New Project'}
-                        </Button>
-                    </div>
-                )}
+            {isAdmin && (
+                <div className="flex flex-wrap gap-3 items-center mb-6">
+                    <input
+                        value={title}
+                        onChange={e => setTitle(e.target.value)}
+                        onKeyDown={e => e.key === 'Enter' && void create()}
+                        placeholder="New project title…"
+                        className="flex-1 min-w-56 rounded-lg px-3 py-2 text-sm outline-none"
+                        style={{
+                            background: 'var(--color-surface)',
+                            border: '1px solid var(--color-divider)',
+                            color: 'var(--color-text)',
+                        }}
+                    />
+                    <button
+                        onClick={() => void create()}
+                        disabled={!title.trim() || creating}
+                        className="btn btn-primary"
+                    >
+                        {creating ? 'Creating…' : 'New Project'}
+                    </button>
+                </div>
+            )}
 
+            <section className="flex flex-col gap-3.5" style={{paddingBottom: 88}}>
                 {projects.length === 0 ? (
-                    <p className="text-gray-400 text-center py-16">
+                    <p className="text-muted py-12 text-center">
                         {isAdmin ? 'No projects yet — create your first one above.' : 'No projects published yet.'}
                     </p>
-                ) : (
-                    <div className="space-y-4">
-                        {projects.map(project => (
-                            <Link
-                                key={project.id}
-                                to={`/projects/${project.id}`}
-                                className="block border border-gray-200 bg-white rounded-xl p-5 hover:shadow-md hover:border-accent-300 transition-all"
-                            >
-                                <div className="flex items-start justify-between gap-3">
-                                    <h2 className="font-semibold text-lg text-gray-800">{project.title}</h2>
-                                    {isAdmin && !project.published && (
-                                        <span className="shrink-0 px-2 py-0.5 text-xs rounded-full bg-amber-100 text-amber-700 border border-amber-200">
-                                            Draft
-                                        </span>
-                                    )}
-                                </div>
-                                {project.tagline && (
-                                    <p className="mt-1 text-sm text-gray-600 leading-relaxed">{project.tagline}</p>
-                                )}
-                                {project.technologies.length > 0 && (
-                                    <div className="mt-3 flex flex-wrap gap-1.5">
-                                        {project.technologies.map((tech, i) => (
-                                            <span key={i} className="px-2 py-0.5 bg-gray-100 text-gray-600 text-xs rounded-md">
-                                                {tech}
-                                            </span>
-                                        ))}
-                                    </div>
-                                )}
-                            </Link>
-                        ))}
-                    </div>
-                )}
-            </main>
+                ) : projects.map(project => (
+                    <Link
+                        key={project.id}
+                        to={`/projects/${project.id}`}
+                        className="card elev-sm"
+                        style={{padding: 22}}
+                    >
+                        <div className="flex items-start justify-between gap-3">
+                            <h2 className="card-title text-[19px]">{project.title}</h2>
+                            {isAdmin && !project.published && (
+                                <span className="tag tag-accent shrink-0">Draft</span>
+                            )}
+                        </div>
+                        {project.tagline && <p className="card-body">{project.tagline}</p>}
+                        {project.technologies.length > 0 && (
+                            <div className="flex flex-wrap gap-1.5 mt-1.5">
+                                {project.technologies.map((tech, i) => (
+                                    <span key={i} className="tag tag-neutral">{tech}</span>
+                                ))}
+                            </div>
+                        )}
+                    </Link>
+                ))}
+            </section>
         </div>
     )
 }

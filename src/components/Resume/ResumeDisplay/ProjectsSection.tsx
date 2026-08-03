@@ -1,4 +1,5 @@
 import type {Project} from '../../../models/Resume.ts'
+import {Link} from "react-router-dom";
 import {AnimatePresence, motion} from "framer-motion";
 import {InlineText} from "../ResumeEditForms/InlineText.tsx";
 import {InlineStringList} from "../ResumeEditForms/InlineStringList.tsx";
@@ -13,8 +14,6 @@ interface Props {
 
 const emptyProject: Project = {name: '', description: '', technologies: [], link: ''}
 
-const techChipClass = "px-2 py-0.5 bg-gray-100 text-gray-600 text-xs rounded-md"
-
 export function ProjectsSection({ projects, editMode = false, onChange }: Props) {
   if (!projects.length && !editMode) return null
 
@@ -23,18 +22,26 @@ export function ProjectsSection({ projects, editMode = false, onChange }: Props)
   }
 
   return (
-    <section>
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">Projects</h2>
-      <div className="grid gap-4 sm:grid-cols-2">
+    <section className="section-rule" style={{padding: '40px 0 88px'}}>
+      <div className="flex justify-between items-baseline gap-4 mb-5">
+        <h2>Projects</h2>
+        <Link to="/projects" className="text-sm whitespace-nowrap">View all →</Link>
+      </div>
+
+      <div
+        className="grid gap-[18px]"
+        style={{gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))'}}
+      >
         <AnimatePresence initial={false}>
           {projects.map((project, i) => (
             <motion.div
               key={i}
-              initial={{opacity: 0, scale: 0.97}}
+              initial={{opacity: 0, scale: 0.98}}
               animate={{opacity: 1, scale: 1}}
-              exit={{opacity: 0, scale: 0.97}}
+              exit={{opacity: 0, scale: 0.98}}
               transition={{duration: 0.15}}
-              className="group border border-gray-200 rounded-xl p-5 hover:shadow-md transition-shadow"
+              className="card elev-sm group relative"
+              style={{padding: 18}}
             >
               <div className="flex items-start justify-between gap-2">
                 <InlineText
@@ -43,7 +50,7 @@ export function ProjectsSection({ projects, editMode = false, onChange }: Props)
                   editMode={editMode}
                   placeholder="Project name"
                   ariaLabel="Project name"
-                  className="block font-semibold text-gray-800 flex-1"
+                  className="card-title flex-1"
                   onChange={value => update(i, {...project, name: value})}
                 />
                 {editMode ? (
@@ -60,9 +67,9 @@ export function ProjectsSection({ projects, editMode = false, onChange }: Props)
                     href={project.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-accent-500 hover:text-accent-700 text-sm shrink-0"
+                    className="text-xs shrink-0"
                   >
-                    ↗ Link
+                    ↗
                   </a>
                 )}
               </div>
@@ -75,29 +82,28 @@ export function ProjectsSection({ projects, editMode = false, onChange }: Props)
                 rows={3}
                 placeholder="What is this project?"
                 ariaLabel="Project description"
-                className="block mt-2 text-sm text-gray-600 leading-relaxed"
+                className="card-body"
                 onChange={value => update(i, {...project, description: value})}
               />
 
               <InlineStringList
                 items={project.technologies}
                 editMode={editMode}
-                chipClassName={techChipClass}
                 addLabel="Tech"
                 placeholder="Technology"
-                className="mt-3"
+                className="mt-1"
                 onChange={technologies => update(i, {...project, technologies})}
               />
 
               {editMode && (
-                <div className="mt-3 flex items-baseline gap-2 text-sm">
-                  <span className="text-gray-400 text-xs uppercase tracking-wider shrink-0">Link</span>
+                <div className="flex items-baseline gap-2 text-xs mt-1">
+                  <span className="text-muted uppercase tracking-wider shrink-0">Link</span>
                   <InlineText
                     value={project.link ?? ''}
                     editMode
-                    placeholder="https://…"
+                    placeholder="Leave blank if private"
                     ariaLabel="Project link"
-                    className="text-accent-600 flex-1 truncate"
+                    className="text-accent-300 flex-1 truncate"
                     onChange={value => update(i, {...project, link: value})}
                   />
                 </div>
@@ -106,8 +112,9 @@ export function ProjectsSection({ projects, editMode = false, onChange }: Props)
           ))}
         </AnimatePresence>
       </div>
+
       {editMode && (
-        <AddEntryButton className="mt-4" onClick={() => onChange?.([...projects, {...emptyProject}])}>
+        <AddEntryButton className="mt-5" onClick={() => onChange?.([...projects, {...emptyProject}])}>
           Add Project
         </AddEntryButton>
       )}

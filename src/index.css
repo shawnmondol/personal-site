@@ -12,6 +12,14 @@
   --color-accent-800: var(--theme-800);
   --color-accent-900: var(--theme-900);
   --color-accent-950: var(--theme-950);
+
+  --color-bg: var(--nocturne-bg);
+  --color-surface: var(--nocturne-surface);
+  --color-text: var(--nocturne-text);
+  --color-divider: var(--nocturne-divider);
+
+  --font-heading: var(--nocturne-font-heading);
+  --font-body: var(--nocturne-font-body);
 }
 
 /* CSS fallback — blue theme values so variables are defined before JS hydrates */
@@ -29,3 +37,165 @@
   --theme-950: oklch(0.282 0.091 267.935);
 }
 
+/*
+ * Nocturne surface palette. Deliberately near-neutral so the theme picker's accent
+ * is the only hue that shifts — `--color-accent*` below all resolve to `--theme-*`,
+ * which ThemeContext rewrites on documentElement.
+ */
+:root {
+  --nocturne-bg: oklch(0.165 0.012 265);
+  --nocturne-surface: oklch(0.213 0.014 265);
+  --nocturne-text: oklch(0.949 0.005 265);
+  --nocturne-divider: color-mix(in srgb, var(--nocturne-text) 12%, transparent);
+
+  --color-neutral-500: oklch(0.62 0.012 265);
+
+  /* Unnumbered aliases used by the mockup's markup. */
+  --color-accent: var(--theme-400);
+  --color-accent-soft: var(--theme-300);
+  --color-accent-glow: var(--theme-900);
+
+  --nocturne-font-heading: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --nocturne-font-body: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --muted-55: color-mix(in srgb, var(--nocturne-text) 55%, transparent);
+  --muted-78: color-mix(in srgb, var(--nocturne-text) 78%, transparent);
+  --muted-82: color-mix(in srgb, var(--nocturne-text) 82%, transparent);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(1100px 700px at 85% -10%, color-mix(in srgb, var(--color-accent-glow) 55%, transparent), transparent 60%),
+    radial-gradient(1000px 700px at -10% 100%, color-mix(in srgb, black 30%, transparent), transparent 55%),
+    var(--nocturne-bg);
+  background-attachment: fixed;
+  color: var(--nocturne-text);
+  font-family: var(--nocturne-font-body);
+}
+
+a { color: var(--color-accent); text-decoration: none; }
+a:hover { color: var(--theme-300); }
+
+h1, h2, h3, h4 { font-family: var(--nocturne-font-heading); }
+h1 { font-size: clamp(38px, 5vw, 58px); line-height: 1.08; letter-spacing: -0.015em; margin: 0; }
+h2 { font-size: 24px; letter-spacing: -0.01em; margin: 0; }
+
+@layer components {
+  /* ── Layout ─────────────────────────────────────────────────────── */
+  .page-shell {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding-inline: clamp(20px, 5vw, 72px);
+  }
+
+  .section-rule { border-top: 1px solid var(--color-divider); }
+
+  /* ── Nav ────────────────────────────────────────────────────────── */
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 14px clamp(20px, 5vw, 72px);
+  }
+  .nav-brand {
+    font-family: var(--nocturne-font-heading);
+    font-weight: 600;
+    font-size: 15px;
+    margin-right: auto;
+    letter-spacing: -0.01em;
+  }
+  .nav-link {
+    font-size: 14px;
+    color: var(--nocturne-text);
+    cursor: pointer;
+    transition: color 0.15s ease;
+  }
+  .nav-link:hover { color: var(--color-accent); }
+  .nav-link-active { color: var(--color-accent); }
+
+  /* ── Buttons ────────────────────────────────────────────────────── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 9px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, opacity 0.15s ease;
+    white-space: nowrap;
+  }
+  .btn:disabled { opacity: 0.45; cursor: default; }
+
+  .btn-primary {
+    background: var(--color-accent);
+    color: oklch(0.16 0.012 265);
+    font-weight: 600;
+  }
+  .btn-primary:hover:not(:disabled) { background: var(--theme-300); color: oklch(0.16 0.012 265); }
+
+  .btn-secondary {
+    background: color-mix(in srgb, var(--nocturne-text) 6%, transparent);
+    border-color: var(--color-divider);
+    color: var(--nocturne-text);
+  }
+  .btn-secondary:hover:not(:disabled) {
+    border-color: color-mix(in srgb, var(--color-accent) 55%, transparent);
+    color: var(--color-accent);
+  }
+
+  .btn-danger { background: transparent; color: var(--muted-55); }
+  .btn-danger:hover:not(:disabled) { color: oklch(0.68 0.19 22); }
+
+  /* ── Cards ──────────────────────────────────────────────────────── */
+  .card {
+    background: color-mix(in srgb, var(--nocturne-surface) 70%, transparent);
+    border: 1px solid var(--color-divider);
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+  }
+  .card:hover { border-color: color-mix(in srgb, var(--color-accent) 45%, transparent); }
+  .elev-sm { box-shadow: 0 1px 2px rgb(0 0 0 / 0.28), 0 8px 24px -12px rgb(0 0 0 / 0.45); }
+
+  .card-title { font-size: 16px; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
+  .card-body { font-size: 14px; line-height: 1.6; color: var(--muted-78); margin: 0; }
+
+  /* ── Tags ───────────────────────────────────────────────────────── */
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 9px;
+    border-radius: 999px;
+    font-size: 12px;
+    line-height: 1.5;
+    border: 1px solid transparent;
+    white-space: nowrap;
+  }
+  .tag-neutral {
+    background: color-mix(in srgb, var(--nocturne-text) 7%, transparent);
+    border-color: var(--color-divider);
+    color: var(--muted-82);
+  }
+  .tag-accent {
+    background: color-mix(in srgb, var(--color-accent) 14%, transparent);
+    border-color: color-mix(in srgb, var(--color-accent) 38%, transparent);
+    color: var(--color-accent-soft);
+  }
+
+  /* ── Text helpers matching the mockup's color-mix usage ─────────── */
+  .text-muted { color: var(--muted-55); }
+  .text-body { color: var(--muted-82); }
+  .text-subtle { color: var(--muted-78); }
+}

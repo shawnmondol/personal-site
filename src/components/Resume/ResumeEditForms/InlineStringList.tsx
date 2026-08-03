@@ -16,7 +16,7 @@ interface Props {
     className?: string
 }
 
-const defaultChipClass = "px-3 py-1 bg-accent-50 text-accent-700 text-sm rounded-full border border-accent-100"
+const defaultChipClass = "tag tag-neutral"
 
 /**
  * A list of plain strings — skills, project technologies, experience bullets —
@@ -54,7 +54,7 @@ export function InlineStringList({
         return variant === 'bullet' ? (
             <ul className={`mt-3 space-y-1 ${className}`}>
                 {items.map((item, i) => (
-                    <li key={i} className="text-gray-600 text-sm flex gap-2">
+                    <li key={i} className="text-body text-sm flex gap-2 leading-relaxed">
                         <span className="text-accent-400 mt-0.5">▸</span>
                         <span>{item}</span>
                     </li>
@@ -80,7 +80,7 @@ export function InlineStringList({
                             animate={{opacity: 1, height: 'auto'}}
                             exit={{opacity: 0, height: 0}}
                             transition={{duration: 0.15}}
-                            className="group/item text-gray-600 text-sm flex gap-2 items-start"
+                            className="group/item text-body text-sm flex gap-2 items-start"
                         >
                             <span className="text-accent-400 mt-0.5 shrink-0">▸</span>
                             <InlineText
@@ -98,7 +98,7 @@ export function InlineStringList({
                                 title="Remove bullet"
                                 aria-label="Remove bullet"
                                 onClick={() => onChange(removeAt(items, i))}
-                                className="opacity-0 group-hover/item:opacity-100 text-gray-300 hover:text-red-500 leading-none transition-all cursor-pointer shrink-0 mt-0.5"
+                                className="opacity-0 group-hover/item:opacity-100 text-muted hover:text-red-400 leading-none transition-all cursor-pointer shrink-0 mt-0.5"
                             >
                                 ×
                             </button>

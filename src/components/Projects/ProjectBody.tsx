@@ -24,7 +24,12 @@ const addOptions: { type: Exclude<ProjectBlockType, 'image'>; label: string; ico
     {type: 'code', label: 'Code', icon: Code},
 ]
 
-const codeClass = "font-mono text-sm text-gray-100 whitespace-pre"
+const codeClass = "font-mono text-sm whitespace-pre"
+
+const codePanelStyle = {
+    background: 'color-mix(in srgb, black 35%, var(--color-surface))',
+    border: '1px solid var(--color-divider)',
+}
 
 export function ProjectBody({blocks, projectId, editMode = false, onChange}: Props) {
     const [uploading, setUploading] = useState(false)
@@ -78,7 +83,7 @@ export function ProjectBody({blocks, projectId, editMode = false, onChange}: Pro
                         editMode={editMode}
                         placeholder="Section heading"
                         ariaLabel="Heading"
-                        className="block text-2xl font-bold text-gray-800"
+                        className="block text-[20px] font-semibold font-heading"
                         onChange={text => update(index, {...block, text})}
                     />
                 )
@@ -92,7 +97,7 @@ export function ProjectBody({blocks, projectId, editMode = false, onChange}: Pro
                         rows={5}
                         placeholder="Explain how it works…"
                         ariaLabel="Paragraph"
-                        className="block text-gray-600 leading-relaxed whitespace-pre-wrap"
+                        className="block text-base leading-[1.7] whitespace-pre-wrap text-body"
                         onChange={text => update(index, {...block, text})}
                     />
                 )
@@ -115,7 +120,8 @@ export function ProjectBody({blocks, projectId, editMode = false, onChange}: Pro
                                 <img
                                     src={block.url}
                                     alt={block.caption}
-                                    className="w-full rounded-xl border border-gray-200"
+                                    className="w-full rounded-xl border"
+                                    style={{borderColor: 'var(--color-divider)'}}
                                 />
                                 {editMode && (
                                     <button
@@ -131,7 +137,8 @@ export function ProjectBody({blocks, projectId, editMode = false, onChange}: Pro
                             <button
                                 type="button"
                                 onClick={() => pickImage(block.id)}
-                                className="w-full py-12 border border-dashed border-gray-300 rounded-xl text-sm text-gray-400 hover:border-accent-400 hover:text-accent-500 cursor-pointer transition-colors"
+                                className="w-full py-12 border border-dashed rounded-xl text-sm text-muted hover:border-accent-400 hover:text-accent-400 cursor-pointer transition-colors"
+                                style={{borderColor: 'var(--color-divider)'}}
                             >
                                 Choose an image
                             </button>
@@ -143,7 +150,7 @@ export function ProjectBody({blocks, projectId, editMode = false, onChange}: Pro
                                 editMode={editMode}
                                 placeholder="Caption"
                                 ariaLabel="Image caption"
-                                className="block mt-2 text-sm text-gray-500 text-center"
+                                className="block mt-2 text-sm text-muted text-center"
                                 onChange={caption => update(index, {...block, caption})}
                             />
                         )}
@@ -151,11 +158,10 @@ export function ProjectBody({blocks, projectId, editMode = false, onChange}: Pro
                 )
             case 'code':
                 return editMode ? (
-                    <div className="bg-gray-900 rounded-xl p-4 overflow-x-auto">
+                    <div className="rounded-xl p-4 overflow-x-auto" style={codePanelStyle}>
                         <InlineText
                             value={block.code}
                             editMode
-                            tone="dark"
                             multiline
                             rows={8}
                             placeholder="Paste a code snippet"
@@ -165,7 +171,7 @@ export function ProjectBody({blocks, projectId, editMode = false, onChange}: Pro
                         />
                     </div>
                 ) : (
-                    <pre className="bg-gray-900 rounded-xl p-4 overflow-x-auto">
+                    <pre className="rounded-xl p-4 overflow-x-auto" style={codePanelStyle}>
                         <code className={codeClass}>{block.code}</code>
                     </pre>
                 )
@@ -191,7 +197,7 @@ export function ProjectBody({blocks, projectId, editMode = false, onChange}: Pro
                                 index={index}
                                 total={blocks.length}
                                 label={block.type}
-                                className="absolute -top-3 right-0 z-10 bg-white rounded-lg shadow-sm border border-gray-200 px-1"
+                                className="absolute -top-3 right-0 z-10 rounded-lg elev-sm px-1 bg-[var(--color-surface)] border border-[var(--color-divider)]"
                                 onMove={to => onChange?.(moveItem(blocks, index, to))}
                                 onRemove={() => remove(index)}
                             />
@@ -202,14 +208,14 @@ export function ProjectBody({blocks, projectId, editMode = false, onChange}: Pro
             </AnimatePresence>
 
             {editMode && (
-                <div className="flex flex-wrap items-center gap-2 pt-4 border-t border-dashed border-gray-200">
-                    <span className="text-xs uppercase tracking-wider text-gray-400 mr-1">Add</span>
+                <div className="flex flex-wrap items-center gap-2 pt-4 border-t border-dashed border-[var(--color-divider)]">
+                    <span className="text-xs uppercase tracking-wider text-muted mr-1">Add</span>
                     {addOptions.map(({type, label, icon: Icon}) => (
                         <button
                             key={type}
                             type="button"
                             onClick={() => onChange?.([...blocks, makeBlock(type)])}
-                            className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-600 border border-gray-200 rounded-lg hover:border-accent-400 hover:text-accent-600 cursor-pointer transition-colors"
+                            className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-body border border-[var(--color-divider)] rounded-lg hover:border-accent-400 hover:text-accent-400 cursor-pointer transition-colors"
                         >
                             <Icon size={14}/> {label}
                         </button>
@@ -218,7 +224,7 @@ export function ProjectBody({blocks, projectId, editMode = false, onChange}: Pro
                         type="button"
                         disabled={uploading}
                         onClick={() => pickImage(null)}
-                        className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-600 border border-gray-200 rounded-lg hover:border-accent-400 hover:text-accent-600 cursor-pointer transition-colors disabled:opacity-50"
+                        className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-body border border-[var(--color-divider)] rounded-lg hover:border-accent-400 hover:text-accent-400 cursor-pointer transition-colors disabled:opacity-50"
                     >
                         <ImageIcon size={14}/> {uploading ? 'Uploading…' : 'Image'}
                     </button>

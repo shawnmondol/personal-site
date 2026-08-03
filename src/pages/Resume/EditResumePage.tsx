@@ -4,7 +4,6 @@ import {useEffect, useState} from "react";
 import {toast} from "sonner";
 import {Loading} from "../../components/SiteComponents/Loading.tsx";
 import {getResume, updateResume} from "../../services/resume/firestoreResumeService.ts";
-import {Button} from "../../components/SiteComponents/Button.tsx";
 import {MoveLeft} from "lucide-react";
 import {HeroSection} from "../../components/Resume/ResumeDisplay/HeroSection.tsx";
 import {ExperienceSection} from "../../components/Resume/ResumeDisplay/ExperienceSection.tsx";
@@ -69,51 +68,47 @@ export function EditResumePage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
-            <div className="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-gray-200">
-                <div className="max-w-3xl mx-auto px-6 py-3 flex items-center justify-between gap-4">
-                    <Button onClick={leave} className="flex items-center justify-center">
-                        <MoveLeft className="mr-2 h-4 w-4"/>
-                        Back To Dashboard
-                    </Button>
+        <>
+            <div
+                className="sticky top-[57px] z-20 border-b"
+                style={{
+                    background: 'color-mix(in srgb, var(--color-bg) 92%, transparent)',
+                    backdropFilter: 'blur(10px)',
+                    borderColor: 'var(--color-divider)',
+                }}
+            >
+                <div className="page-shell flex flex-wrap items-center justify-between gap-3 py-3">
+                    <button onClick={leave} className="btn btn-secondary">
+                        <MoveLeft size={15}/> Dashboard
+                    </button>
                     <div className="flex items-center gap-3">
-                        <span className="text-sm text-gray-500">
+                        <span className="text-sm text-muted">
                             {saving ? 'Saving…' : isDirty ? 'Unsaved changes' : 'All changes saved'}
                         </span>
                         {isDirty && !saving && (
-                            <button
-                                onClick={discard}
-                                className="text-sm text-gray-400 hover:text-red-500 cursor-pointer transition-colors"
-                            >
-                                Discard
-                            </button>
+                            <button onClick={discard} className="btn btn-danger">Discard</button>
                         )}
-                        <Button
-                            onClick={save}
-                            disabled={!isDirty || saving}
-                            className={!isDirty || saving ? 'opacity-50 pointer-events-none' : ''}
-                        >
+                        <button onClick={() => void save()} disabled={!isDirty || saving} className="btn btn-primary">
                             Save
-                        </Button>
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <HeroSection
-                name={data.name}
-                title={data.title}
-                summary={data.summary}
-                contact={data.contact}
-                editMode
-                onChange={updated => patch(updated)}
-            />
-
-            <main className="max-w-3xl mx-auto px-6 py-12 space-y-14">
+            <div className="page-shell">
+                <HeroSection
+                    name={data.name}
+                    title={data.title}
+                    summary={data.summary}
+                    contact={data.contact}
+                    editMode
+                    onChange={updated => patch(updated)}
+                />
                 <ExperienceSection experience={data.experience} editMode onChange={experience => patch({experience})} />
+                <EducationSection education={data.education} editMode onChange={education => patch({education})} />
                 <SkillsSection skills={data.skills} editMode onChange={skills => patch({skills})} />
                 <ProjectsSection projects={data.projects} editMode onChange={projects => patch({projects})} />
-                <EducationSection education={data.education} editMode onChange={education => patch({education})} />
-            </main>
-        </div>
+            </div>
+        </>
     )
 }

@@ -21,9 +21,13 @@ export function SkillsSection({ skills, editMode = false, onChange }: Props) {
   }
 
   return (
-    <section>
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">Skills</h2>
-      <div className="space-y-4">
+    <section className="section-rule" style={{padding: '40px 0'}}>
+      <h2 className="mb-5">Skills</h2>
+
+      <div
+        className="grid gap-6"
+        style={{gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))'}}
+      >
         <AnimatePresence initial={false}>
           {skills.map((group, gi) => (
             <motion.div
@@ -34,14 +38,14 @@ export function SkillsSection({ skills, editMode = false, onChange }: Props) {
               transition={{duration: 0.15}}
               className="group"
             >
-              <div className="flex items-center justify-between gap-2 mb-2">
+              <div className="flex items-center justify-between gap-2 mb-2.5">
                 <InlineText
-                  as="h3"
+                  as="h4"
                   value={group.category}
                   editMode={editMode}
                   placeholder="Category"
                   ariaLabel="Skill category"
-                  className="block text-sm font-semibold text-gray-500 uppercase tracking-wider"
+                  className="block text-xs uppercase tracking-[0.06em] text-muted"
                   onChange={value => update(gi, {...group, category: value})}
                 />
                 {editMode && (
@@ -66,8 +70,9 @@ export function SkillsSection({ skills, editMode = false, onChange }: Props) {
           ))}
         </AnimatePresence>
       </div>
+
       {editMode && (
-        <AddEntryButton className="mt-4" onClick={() => onChange?.([...skills, {...emptyCategory, items: []}])}>
+        <AddEntryButton className="mt-5" onClick={() => onChange?.([...skills, {...emptyCategory, items: []}])}>
           Add Category
         </AddEntryButton>
       )}

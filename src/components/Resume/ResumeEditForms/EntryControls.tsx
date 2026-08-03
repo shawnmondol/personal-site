@@ -9,7 +9,7 @@ interface Props {
     className?: string
 }
 
-const buttonClass = "p-1 rounded text-gray-400 hover:text-accent-600 hover:bg-accent-50 disabled:opacity-30 disabled:hover:text-gray-400 disabled:hover:bg-transparent disabled:cursor-default cursor-pointer transition-colors"
+const buttonClass = "p-1 rounded text-muted hover:text-accent-400 hover:bg-white/10 disabled:opacity-30 disabled:hover:bg-transparent disabled:cursor-default cursor-pointer transition-colors"
 
 /** Reorder/remove cluster for one entry in a section. Parent needs `group relative`. */
 export function EntryControls({index, total, label, onMove, onRemove, className = ''}: Props) {
@@ -40,7 +40,7 @@ export function EntryControls({index, total, label, onMove, onRemove, className 
                 title={`Remove ${label}`}
                 aria-label={`Remove ${label}`}
                 onClick={onRemove}
-                className="p-1 rounded text-gray-400 hover:text-red-500 hover:bg-red-50 cursor-pointer transition-colors"
+                className="p-1 rounded text-muted hover:text-red-400 hover:bg-red-500/15 cursor-pointer transition-colors"
             >
                 <X size={16} />
             </button>
@@ -59,7 +59,7 @@ export function AddEntryButton({onClick, children, className = ''}: AddEntryButt
         <button
             type="button"
             onClick={onClick}
-            className={`text-sm text-accent-500 hover:text-accent-700 cursor-pointer transition-colors ${className}`}
+            className={`text-sm text-accent-400 hover:text-accent-300 cursor-pointer transition-colors ${className}`}
         >
             + {children}
         </button>

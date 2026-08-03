@@ -21,8 +21,6 @@ interface Props {
     startEditing?: boolean
     /** Fires when the edit is abandoned with Escape, so lists can drop blank entries. */
     onCancel?: () => void
-    /** Tone of the surface behind the text, so the hover affordance stays visible. */
-    tone?: 'light' | 'dark'
     ariaLabel?: string
 }
 
@@ -37,7 +35,6 @@ export function InlineText({
     as: Tag = 'span',
     startEditing = false,
     onCancel,
-    tone = 'light',
     ariaLabel,
 }: Props) {
     const [editing, setEditing] = useState(() => editMode && startEditing)
@@ -69,8 +66,14 @@ export function InlineText({
         onCancel?.()
     }
 
+    const editStyle = {
+        background: 'var(--color-surface)',
+        color: 'var(--color-text)',
+        borderColor: 'var(--color-accent)',
+    }
+
     if (editing) {
-        const editClass = `${className} bg-white text-gray-900 border border-accent-400 rounded px-1.5 py-0.5 outline-none focus:border-accent-500 w-full`
+        const editClass = `${className} border rounded px-1.5 py-0.5 outline-none w-full`
         return multiline ? (
             <textarea
                 ref={ref}
@@ -78,6 +81,7 @@ export function InlineText({
                 aria-label={ariaLabel}
                 value={draft}
                 className={editClass}
+                style={editStyle}
                 onChange={e => setDraft(e.target.value)}
                 onBlur={commit}
                 onKeyDown={e => {
@@ -91,6 +95,7 @@ export function InlineText({
                 aria-label={ariaLabel}
                 value={draft}
                 className={editClass}
+                style={editStyle}
                 onChange={e => setDraft(e.target.value)}
                 onBlur={commit}
                 onKeyDown={e => {
@@ -116,11 +121,8 @@ export function InlineText({
                     startEdit()
                 }
             }}
-            className={`${className} cursor-text rounded px-1.5 py-0.5 -mx-1.5 border border-dashed border-transparent transition-colors ${
-                tone === 'dark'
-                    ? 'hover:border-white/40 hover:bg-white/10'
-                    : 'hover:border-accent-300 hover:bg-accent-50/60'
-            } ${value ? '' : 'text-gray-400 italic'}`}
+            className={`${className} cursor-text rounded px-1.5 py-0.5 -mx-1.5 border border-dashed border-transparent transition-colors hover:border-accent-400/50 hover:bg-white/5`}
+            style={value ? undefined : {color: 'var(--muted-55)', fontStyle: 'italic'}}
         >
             {value || placeholder}
         </Tag>
