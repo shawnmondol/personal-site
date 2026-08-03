@@ -2,6 +2,7 @@ import { collection, deleteDoc, doc, getDoc, getDocs, query, setDoc, where } fro
 import { deleteObject, getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
 import { app, db } from '../auth/firebaseService'
 import type { Project } from '../../models/Project'
+import { FULL_MAX_EDGE, FULL_QUALITY, resizeImage } from '../images/resizeImage'
 
 const PROJECT_COLLECTION = 'projects'
 
@@ -86,8 +87,16 @@ export async function deleteProject(project: Project): Promise<void> {
 }
 
 export async function uploadProjectImage(file: File, projectId: string): Promise<string> {
-    const storageRef = ref(storage, `projects/${projectId}/${Date.now()}-${file.name}`)
-    const snapshot = await uploadBytes(storageRef, file)
+    // Body images render full-width, so they need downscaling but no separate thumbnail.
+    const resized = await resizeImage(file, FULL_MAX_EDGE, FULL_QUALITY)
+    const stem = file.name.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9-_]/g, '-')
+    const storageRef = ref(storage, `projects/${projectId}/${Date.now()}-${stem}.${resized.ext}`)
+
+    // Timestamped path means the object is immutable — cache it aggressively.
+    const snapshot = await uploadBytes(storageRef, resized.blob, {
+        cacheControl: 'public, max-age=31536000, immutable',
+        contentType: resized.blob.type || file.type,
+    })
     return getDownloadURL(snapshot.ref)
 }
 

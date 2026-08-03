@@ -1,7 +1,9 @@
 import { doc, getDoc, setDoc } from 'firebase/firestore'
 import { db, app } from '../auth/firebaseService'
 import { getDownloadURL, getStorage, ref, uploadBytes, deleteObject } from 'firebase/storage'
-import type { AboutData, TravelLocation } from '../../models/About'
+import type { AboutData, StoredImage, TravelImage, TravelLocation } from '../../models/About'
+import { fullUrl, thumbUrl } from '../../models/About'
+import { resizeForGallery } from '../images/resizeImage'
 
 const storage = getStorage(app)
 
@@ -49,10 +51,30 @@ export async function searchLocations(query: string): Promise<LocationSuggestion
   })
 }
 
-async function uploadTravelImage(file: File, locationId: string): Promise<string> {
-  const storageRef = ref(storage, `travel/${locationId}/${Date.now()}-${file.name}`)
-  const snapshot = await uploadBytes(storageRef, file)
-  return getDownloadURL(snapshot.ref)
+/** Paths are timestamped, so every object is immutable and safe to cache forever. */
+const IMAGE_METADATA = { cacheControl: 'public, max-age=31536000, immutable' }
+
+function baseName(file: File): string {
+  return file.name.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9-_]/g, '-')
+}
+
+/** Uploads a downscaled display image plus a thumbnail, and returns both URLs. */
+async function uploadTravelImage(file: File, locationId: string): Promise<TravelImage> {
+  const { full, thumb } = await resizeForGallery(file)
+  const stem = `travel/${locationId}/${Date.now()}-${baseName(file)}`
+
+  const [url, thumbDownloadUrl] = await Promise.all([
+    uploadBytes(ref(storage, `${stem}.${full.ext}`), full.blob, {
+      ...IMAGE_METADATA,
+      contentType: full.blob.type || file.type,
+    }).then(snap => getDownloadURL(snap.ref)),
+    uploadBytes(ref(storage, `${stem}-thumb.${thumb.ext}`), thumb.blob, {
+      ...IMAGE_METADATA,
+      contentType: thumb.blob.type || file.type,
+    }).then(snap => getDownloadURL(snap.ref)),
+  ])
+
+  return { url, thumb: thumbDownloadUrl }
 }
 
 export async function addImagesToLocation(
@@ -61,15 +83,24 @@ export async function addImagesToLocation(
   locationId: string,
   files: File[]
 ): Promise<AboutData> {
-  const urls = await Promise.all(files.map((f) => uploadTravelImage(f, locationId)))
+  const uploaded: StoredImage[] = await Promise.all(files.map((f) => uploadTravelImage(f, locationId)))
   const updated: AboutData = {
     ...data,
     [tab]: data[tab].map((loc) =>
-      loc.id === locationId ? { ...loc, images: [...(loc.images ?? []), ...urls] } : loc
+      loc.id === locationId ? { ...loc, images: [...(loc.images ?? []), ...uploaded] } : loc
     ),
   }
   await saveAboutData(updated)
   return updated
+}
+
+async function deleteIfPresent(url?: string) {
+  if (!url) return
+  try {
+    await deleteObject(ref(storage, url))
+  } catch {
+    // Storage file may already be gone; continue
+  }
 }
 
 export async function removeImageFromLocation(
@@ -78,16 +109,22 @@ export async function removeImageFromLocation(
   locationId: string,
   imageUrl: string
 ): Promise<AboutData> {
-  try {
-    await deleteObject(ref(storage, imageUrl))
-  } catch {
-    // Storage file may already be gone; continue
+  const location = data[tab].find((loc) => loc.id === locationId)
+  const target = (location?.images ?? []).find((img) => fullUrl(img) === imageUrl)
+
+  // Remove the thumbnail too, or it is orphaned in Storage forever.
+  if (target) {
+    const thumb = thumbUrl(target)
+    await Promise.all([deleteIfPresent(imageUrl), thumb === imageUrl ? undefined : deleteIfPresent(thumb)])
+  } else {
+    await deleteIfPresent(imageUrl)
   }
+
   const updated: AboutData = {
     ...data,
     [tab]: data[tab].map((loc) =>
       loc.id === locationId
-        ? { ...loc, images: (loc.images ?? []).filter((u) => u !== imageUrl) }
+        ? { ...loc, images: (loc.images ?? []).filter((img) => fullUrl(img) !== imageUrl) }
         : loc
     ),
   }

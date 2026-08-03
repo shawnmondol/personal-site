@@ -11,6 +11,7 @@ import {
 } from '../../services/about/firestoreAboutService'
 import type { LocationSuggestion } from '../../services/about/firestoreAboutService'
 import type { AboutData, TravelLocation } from '../../models/About'
+import { fullUrl, thumbUrl } from '../../models/About'
 
 interface Props {
   isOpen: boolean
@@ -229,11 +230,17 @@ export function TravelAdminModal({ isOpen, onClose, data, onChange }: Props) {
               <div className="px-3 pb-3 border-t border-gray-200 pt-3">
                 {/* Thumbnail grid */}
                 <div className="flex flex-wrap gap-2 mb-3">
-                  {(loc.images ?? []).map((url) => (
-                    <div key={url} className="relative group w-20 h-20">
-                      <img src={url} alt="" className="w-full h-full object-cover rounded-lg" />
+                  {(loc.images ?? []).map((image) => (
+                    <div key={fullUrl(image)} className="relative group w-20 h-20">
+                      <img
+                        src={thumbUrl(image)}
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                        className="w-full h-full object-cover rounded-lg"
+                      />
                       <button
-                        onClick={() => handleImageRemove(loc.id, url)}
+                        onClick={() => handleImageRemove(loc.id, fullUrl(image))}
                         className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center text-white text-xs cursor-pointer"
                       >
                         Remove
