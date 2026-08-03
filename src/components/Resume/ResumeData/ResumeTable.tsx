@@ -11,7 +11,7 @@ import {ExternalLink} from "lucide-react";
 
 const columnHelper = createColumnHelper<ResumeData>()
 
-const emptyCell = <span className="text-gray-400 italic">empty</span>
+const emptyCell = <span className="text-muted italic">empty</span>
 
 const dateFormat = new Intl.DateTimeFormat("en-us", {
     year: 'numeric',
@@ -37,7 +37,7 @@ const columns: ColumnDef<ResumeData, any>[] = [
                         href={info.row.original.fileUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex text-accent-500 hover:text-accent-700"
+                        className="flex text-accent-400 hover:text-accent-300"
                     >
                         {info.getValue()}
                         <ExternalLink className="ml-1 h-5 w-5"/>
@@ -54,7 +54,7 @@ const columns: ColumnDef<ResumeData, any>[] = [
             return (
                 <Link
                     to={`/resume/${info.row.original.guid}/edit`}
-                    className={"flex text-accent-500 hover:text-accent-700"}
+                    className={"flex text-accent-400 hover:text-accent-300"}
                 >
                     Content
                     <ExternalLink className="ml-1 h-5 w-5"/>

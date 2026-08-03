@@ -52,9 +52,9 @@ export function ResumeUpload() {
     const isLoading = status === 'extracting' || status === 'parsing'
 
     return (
-        <div className="h-7/8 bg-gray-50 flex items-center justify-center p-6">
+        <div className="flex items-center justify-center p-6">
             <div className="w-full max-w-md">
-                <p className="text-gray-500 text-center mb-8">Upload your PDF resume to get started</p>
+                <p className="text-muted text-center mb-8">Upload your PDF resume to get started</p>
 
                 <div
                     onClick={() => !isLoading && inputRef.current?.click()}
@@ -63,7 +63,9 @@ export function ResumeUpload() {
                     onDrop={onDrop}
                     className={`
             border-2 border-dashed rounded-2xl p-12 text-center cursor-pointer transition-colors
-            ${dragging ? 'border-accent-500 bg-accent-50' : 'border-gray-300 hover:border-accent-400 hover:bg-gray-100'}
+            ${dragging
+                        ? 'border-accent-400 bg-[color-mix(in_srgb,var(--color-accent)_12%,transparent)]'
+                        : 'border-[var(--color-divider)] hover:border-accent-400 hover:bg-white/5'}
             ${isLoading ? 'pointer-events-none opacity-60' : ''}
           `}
                 >
@@ -78,21 +80,21 @@ export function ResumeUpload() {
                     {isLoading ? (
                         <div className="space-y-3">
                             <div className="w-10 h-10 border-4 border-accent-500 border-t-transparent rounded-full animate-spin mx-auto" />
-                            <p className="text-gray-600 font-medium">
+                            <p className="text-body font-medium">
                                 {status === 'extracting' ? 'Extracting text from PDF...' : 'Parsing with AI...'}
                             </p>
                         </div>
                     ) : (
                         <div className="space-y-2">
                             <div className="text-5xl">📄</div>
-                            <p className="text-gray-700 font-medium">Drop your PDF here</p>
-                            <p className="text-gray-400 text-sm">or click to browse</p>
+                            <p className="font-medium">Drop your PDF here</p>
+                            <p className="text-muted text-sm">or click to browse</p>
                         </div>
                     )}
                 </div>
 
                 {status === 'error' && (
-                    <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm">
+                    <div className="mt-4 p-4 bg-red-500/10 border border-red-500/30 rounded-xl text-red-300 text-sm">
                         <strong>Error:</strong> {errorMsg}
                     </div>
                 )}

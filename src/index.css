@@ -48,6 +48,13 @@
   --nocturne-text: oklch(0.949 0.005 265);
   --nocturne-divider: color-mix(in srgb, var(--nocturne-text) 12%, transparent);
 
+  /* Explicit aliases so raw `var(--color-*)` in components resolves independently
+     of whether Tailwind's @theme inline emits these to :root. */
+  --color-bg: var(--nocturne-bg);
+  --color-surface: var(--nocturne-surface);
+  --color-text: var(--nocturne-text);
+  --color-divider: var(--nocturne-divider);
+
   --color-neutral-500: oklch(0.62 0.012 265);
 
   /* Unnumbered aliases used by the mockup's markup. */

@@ -1,5 +1,4 @@
 import type {ResumeDisplayData} from '../../../models/Resume.ts'
-import {Link} from "react-router-dom";
 import {InlineText} from "../ResumeEditForms/InlineText.tsx";
 
 type HeroFields = Pick<ResumeDisplayData, 'name' | 'title' | 'summary' | 'contact'>

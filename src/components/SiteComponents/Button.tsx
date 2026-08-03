@@ -3,24 +3,17 @@ interface ButtonProps {
     onClick: () => void
     disabled?: boolean
     className?: string
+    variant?: 'primary' | 'secondary' | 'danger'
 }
 
-const styles = {
-    button: [
-        "border-1 bg-accent-500 border-accent-400 shadow-xl",
-        "hover:bg-accent-400 cursor-pointer",
-        "font-bold py-2 px-4 rounded-xl transition-colors transition-transform duration-300",
-        "hover:scale-95 hover:shadow-sm",
-        "text-white"
-    ].join(' ')
-}
-
-export function Button({children, onClick, disabled, className}: ButtonProps) {
+export function Button({children, onClick, disabled, className = '', variant = 'primary'}: ButtonProps) {
     return (
         <button
+            type="button"
             onClick={onClick}
             disabled={disabled}
-            className={styles.button + ' ' + className}>
+            className={`btn btn-${variant} ${className}`}
+        >
             {children}
         </button>
     )

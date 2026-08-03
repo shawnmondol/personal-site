@@ -22,10 +22,10 @@ export function ResumeDataPage() {
     }
 
     return (
-        <div className="m-auto w-full justify-center p-20">
-            <div className="flex justify-between items-center">
-                <h1 className="text-3xl font-bold mb-4">Resume Data</h1>
-                <Button onClick={openModal} >Add Resume</Button>
+        <div className="page-shell" style={{paddingBlock: '64px 88px'}}>
+            <div className="flex justify-between items-center flex-wrap gap-3 mb-6">
+                <h1 className="text-3xl font-bold">Resume Data</h1>
+                <Button onClick={openModal}>Add Resume</Button>
             </div>
             <ResumeTable resumes={resumes} />
             <PopupModal isOpen={showModal} onClose={() => setShowModal(false)}>
