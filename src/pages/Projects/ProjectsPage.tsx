@@ -4,6 +4,7 @@ import {toast} from "sonner";
 import {useAuth} from "../../context/AuthContext.tsx";
 import {Loading} from "../../components/SiteComponents/Loading.tsx";
 import type {Project} from "../../models/Project.ts";
+import {coverThumb} from "../../models/Project.ts";
 import {createProject, getAllProjects, getPublishedProjects} from "../../services/projects/firestoreProjectService.ts";
 
 export function ProjectsPage() {
@@ -12,7 +13,6 @@ export function ProjectsPage() {
     const navigate = useNavigate()
 
     const [projects, setProjects] = useState<Project[] | null>(null)
-    const [title, setTitle] = useState('')
     const [creating, setCreating] = useState(false)
 
     // Waiting for auth avoids fetching the published-only list and then refetching as admin.
@@ -25,11 +25,10 @@ export function ProjectsPage() {
     if (authLoading || !projects) return <Loading />
 
     async function create() {
-        const name = title.trim()
-        if (!name) return
+        if (creating) return
         setCreating(true)
         try {
-            const project = await createProject(name)
+            const project = await createProject('New Project')
             toast.success(`Created “${project.title}”`)
             navigate(`/projects/${project.id}`)
         } catch (error) {
@@ -43,64 +42,75 @@ export function ProjectsPage() {
     return (
         <div className="page-shell">
             <section style={{padding: '80px 0 32px'}}>
-                <h1>Projects</h1>
-                <p className="text-subtle text-base leading-relaxed max-w-[56ch] mt-4">
-                    Things I've built — including the ones whose source I can't share.
-                </p>
+                <div className="flex flex-wrap gap-4 items-end justify-between">
+                    <div>
+                        <h1>Projects</h1>
+                        <p className="text-subtle text-base leading-relaxed max-w-[56ch] mt-4">
+                            Things I've built — including the ones whose source I can't share.
+                        </p>
+                    </div>
+
+                    {isAdmin && (
+                        <button
+                            onClick={() => void create()}
+                            disabled={creating}
+                            className="btn btn-primary shrink-0"
+                        >
+                            {creating ? 'Creating…' : 'New Project'}
+                        </button>
+                    )}
+                </div>
             </section>
 
-            {isAdmin && (
-                <div className="flex flex-wrap gap-3 items-center mb-6">
-                    <input
-                        value={title}
-                        onChange={e => setTitle(e.target.value)}
-                        onKeyDown={e => e.key === 'Enter' && void create()}
-                        placeholder="New project title…"
-                        className="flex-1 min-w-56 rounded-lg px-3 py-2 text-sm outline-none"
-                        style={{
-                            background: 'var(--color-surface)',
-                            border: '1px solid var(--color-divider)',
-                            color: 'var(--color-text)',
-                        }}
-                    />
-                    <button
-                        onClick={() => void create()}
-                        disabled={!title.trim() || creating}
-                        className="btn btn-primary"
-                    >
-                        {creating ? 'Creating…' : 'New Project'}
-                    </button>
-                </div>
-            )}
-
-            <section className="flex flex-col gap-3.5" style={{paddingBottom: 88}}>
+            <section style={{paddingBottom: 88}}>
                 {projects.length === 0 ? (
                     <p className="text-muted py-12 text-center">
                         {isAdmin ? 'No projects yet — create your first one above.' : 'No projects published yet.'}
                     </p>
-                ) : projects.map(project => (
-                    <Link
-                        key={project.id}
-                        to={`/projects/${project.id}`}
-                        className="card elev-sm"
-                        style={{padding: 22}}
-                    >
-                        <div className="flex items-start justify-between gap-3">
-                            <h2 className="card-title text-[19px]">{project.title}</h2>
-                            {isAdmin && !project.published && (
-                                <span className="tag tag-accent shrink-0">Draft</span>
-                            )}
-                        </div>
-                        {project.tagline && <p className="card-body">{project.tagline}</p>}
-                        {project.technologies.length > 0 && (
-                            <div className="flex flex-wrap gap-1.5 mt-1.5">
-                                {project.technologies.map((tech, i) => (
-                                    <span key={i} className="tag tag-neutral">{tech}</span>
-                                ))}
-                            </div>
-                        )}
-                    </Link>
-                ))}
+                ) : (
+                    <div className="flex flex-col gap-[18px]">
+                        {projects.map(project => (
+                            <Link
+                                key={project.id}
+                                to={`/projects/${project.id}`}
+                                className="card elev-sm overflow-hidden gap-0! sm:flex-row!"
+                            >
+                                <div className="relative shrink-0 sm:w-[280px] sm:min-h-[172px]">
+                                    {project.cover ? (
+                                        <img
+                                            src={coverThumb(project.cover)}
+                                            alt=""
+                                            loading="lazy"
+                                            decoding="async"
+                                            className="w-full h-[170px] object-cover sm:absolute sm:inset-0 sm:h-full"
+                                        />
+                                    ) : (
+                                        <div className="w-full h-[170px] bg-linear-to-br from-accent-800 to-accent-950 sm:absolute sm:inset-0 sm:h-full" />
+                                    )}
+                                    {isAdmin && !project.published && (
+                                        <span
+                                            className="absolute top-2 right-2 tag tag-accent backdrop-blur-sm"
+                                            style={{background: 'color-mix(in srgb, var(--color-bg) 70%, transparent)'}}
+                                        >
+                                            Draft
+                                        </span>
+                                    )}
+                                </div>
+                                <div className="px-[18px] pt-4 pb-5 flex flex-col gap-2 sm:justify-center sm:py-[18px]">
+                                    <h2 className="card-title text-[18px]">{project.title}</h2>
+                                    {project.tagline && <p className="card-body text-[13.5px]">{project.tagline}</p>}
+                                    {project.technologies.length > 0 && (
+                                        <div className="flex flex-wrap gap-1.5">
+                                            {project.technologies.map((tech, i) => (
+                                                <span key={i} className="tag tag-neutral">{tech}</span>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            </Link>
+                        ))}
+                    </div>
+                )}
             </section>
         </div>
     )

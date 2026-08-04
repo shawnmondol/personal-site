@@ -4,6 +4,7 @@ import {toast} from "sonner";
 import {useAuth} from "../../context/AuthContext.tsx";
 import {Loading} from "../../components/SiteComponents/Loading.tsx";
 import {ProjectBody} from "../../components/Projects/ProjectBody.tsx";
+import {ProjectCoverImage} from "../../components/Projects/ProjectCoverImage.tsx";
 import {InlineText} from "../../components/Resume/ResumeEditForms/InlineText.tsx";
 import {InlineStringList} from "../../components/Resume/ResumeEditForms/InlineStringList.tsx";
 import type {Project} from "../../models/Project.ts";
@@ -181,6 +182,13 @@ export function ProjectDetailPage() {
                         </a>
                     )}
                 </section>
+
+                <ProjectCoverImage
+                    cover={project.cover}
+                    projectId={project.id}
+                    editMode={isAdmin}
+                    onChange={cover => patch({cover})}
+                />
 
                 <section className="max-w-[760px]" style={{padding: '48px 0 88px'}}>
                     <ProjectBody

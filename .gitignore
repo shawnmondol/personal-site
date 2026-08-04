@@ -28,3 +28,6 @@ service-account.json
 *.njsproj
 *.sln
 *.sw?
+
+# Mockups
+*Mockup.dc.html

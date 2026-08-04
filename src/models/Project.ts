@@ -7,6 +7,17 @@ export type ProjectBlock =
 
 export type ProjectBlockType = ProjectBlock['type']
 
+/** The project's cover: a hero-sized render plus a thumbnail for the card grid. */
+export interface ProjectCover {
+  url: string
+  thumb?: string
+}
+
+/** Covers stored before thumbnails existed only carry `url`. */
+export function coverThumb(cover: ProjectCover): string {
+  return cover.thumb ?? cover.url
+}
+
 export interface Project {
   /** Doc id, also the URL slug. */
   id: string
@@ -15,6 +26,8 @@ export interface Project {
   technologies: string[]
   /** Omitted for private projects — the page simply renders no link. */
   link?: string
+  /** Omitted until one is uploaded; the card falls back to a gradient. */
+  cover?: ProjectCover
   published: boolean
   body: ProjectBlock[]
   /** Epoch millis, so ordering needs no Timestamp conversion. */
