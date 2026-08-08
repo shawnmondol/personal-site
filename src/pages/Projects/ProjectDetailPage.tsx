@@ -65,9 +65,12 @@ export function ProjectDetailPage() {
         if (!project) return
         setSaving(true)
         try {
-            await saveProject(project)
-            setSaved(fingerprint(project))
+            const stored = await saveProject(project)
+            setProject(stored)
+            setSaved(fingerprint(stored))
             toast.success('Project saved')
+            // Retitling moves the project to a new id, and the URL is that id.
+            if (stored.id !== project.id) navigate(`/projects/${stored.id}`, {replace: true})
         } catch (error) {
             console.error(error)
             toast.error('Could not save project')

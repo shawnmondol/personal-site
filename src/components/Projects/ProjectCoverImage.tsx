@@ -1,7 +1,10 @@
 import {useRef, useState} from "react";
 import {toast} from "sonner";
 import type {ProjectCover} from "../../models/Project.ts";
+import {DEFAULT_COVER_HEIGHT} from "../../models/Project.ts";
+import type {CropRect} from "../../services/images/resizeImage.ts";
 import {deleteProjectCover, uploadProjectCover} from "../../services/projects/firestoreProjectService.ts";
+import {ImageCropper} from "../SiteComponents/ImageCropper.tsx";
 
 interface Props {
     cover?: ProjectCover
@@ -13,17 +16,21 @@ interface Props {
 /** The project hero. Visitors see nothing when a project has no cover yet. */
 export function ProjectCoverImage({cover, projectId, editMode = false, onChange}: Props) {
     const [uploading, setUploading] = useState(false)
+    /** Held locally until the crop is confirmed — nothing reaches Storage before then. */
+    const [pending, setPending] = useState<File | null>(null)
     const fileInputRef = useRef<HTMLInputElement>(null)
 
     if (!cover && !editMode) return null
 
-    async function handleFile(file: File) {
+    async function handleCrop(crop: CropRect) {
+        if (!pending) return
         setUploading(true)
         try {
-            const uploaded = await uploadProjectCover(file, projectId)
+            const uploaded = await uploadProjectCover(pending, projectId, crop)
             // The replaced render is unreachable once state moves on — drop it now.
             void deleteProjectCover(cover)
             onChange?.(uploaded)
+            setPending(null)
         } catch (error) {
             console.error(error)
             toast.error('Cover upload failed')
@@ -44,8 +51,13 @@ export function ProjectCoverImage({cover, projectId, editMode = false, onChange}
                     <img
                         src={cover.url}
                         alt=""
-                        className="w-full h-[420px] object-cover rounded-[14px] border"
-                        style={{borderColor: 'var(--color-divider)'}}
+                        className="w-full object-cover rounded-[14px] border"
+                        style={{
+                            borderColor: 'var(--color-divider)',
+                            // Covers cropped to a ratio render it exactly; older ones keep the fixed hero.
+                            aspectRatio: cover.aspect,
+                            height: cover.aspect ? undefined : DEFAULT_COVER_HEIGHT,
+                        }}
                     />
                     {editMode && (
                         <div className="absolute inset-0 flex items-center justify-center gap-3 rounded-[14px] bg-black/50 opacity-0 group-hover/cover:opacity-100 transition-opacity">
@@ -81,9 +93,21 @@ export function ProjectCoverImage({cover, projectId, editMode = false, onChange}
                 onChange={e => {
                     const file = e.target.files?.[0]
                     e.target.value = ''
-                    if (file) void handleFile(file)
+                    if (file) setPending(file)
                 }}
             />
+
+            {pending && (
+                <ImageCropper
+                    key={`${pending.name}-${pending.lastModified}`}
+                    file={pending}
+                    busy={uploading}
+                    title="Crop cover image"
+                    confirmLabel="Set cover"
+                    onCancel={() => setPending(null)}
+                    onConfirm={crop => void handleCrop(crop)}
+                />
+            )}
         </section>
     )
 }

@@ -1,11 +1,12 @@
-import { collection, deleteDoc, doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore'
+import { collection, deleteDoc, doc, getDoc, getDocs, query, setDoc, where, writeBatch } from 'firebase/firestore'
 import { deleteObject, getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
 import { app, db } from '../auth/firebaseService'
 import type { Project, ProjectCover } from '../../models/Project'
-import type { ResizedImage } from '../images/resizeImage'
+import type { CropRect, ResizedImage } from '../images/resizeImage'
 import { FULL_MAX_EDGE, FULL_QUALITY, resizeForGallery, resizeImage } from '../images/resizeImage'
 
 const PROJECT_COLLECTION = 'projects'
+const BACKUP_COLLECTION = 'projectBackups'
 
 const storage = getStorage(app)
 
@@ -26,6 +27,19 @@ function makeSlug(title: string): string {
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-+|-+$/g, '')
     return slug || 'project'
+}
+
+/**
+ * Resolves the slug a title wants into one no other project holds, suffixing `-2`,
+ * `-3`, … on collision. `keepId` is the caller's own id, which never counts as taken.
+ */
+async function uniqueSlug(title: string, keepId?: string): Promise<string> {
+    const base = makeSlug(title)
+    let id = base
+    for (let n = 2; id !== keepId && await getProject(id); n++) {
+        id = `${base}-${n}`
+    }
+    return id
 }
 
 /** Newest first. */
@@ -53,19 +67,70 @@ export async function getProject(id: string): Promise<Project | null> {
     return snap.exists() ? (snap.data() as Project) : null
 }
 
-export async function saveProject(project: Project): Promise<void> {
-    const updated = { ...project, updatedAt: Date.now() }
-    await setDoc(doc(db, PROJECT_COLLECTION, project.id), stripUndefined(updated))
+/** A copy of a project doc as it stood just before a rename replaced it. */
+interface ProjectBackup {
+    project: Project
+    /** Epoch millis the snapshot was taken. */
+    savedAt: number
+}
+
+/**
+ * Snapshots what Firestore currently holds — not the in-memory project, which carries
+ * the unsaved edits. Backups are keyed by the id being vacated, so a project renamed
+ * more than once leaves one recoverable copy per slug it has held.
+ */
+async function backupProject(id: string): Promise<void> {
+    const stored = await getProject(id)
+    if (!stored) return
+    const backup: ProjectBackup = { project: stored, savedAt: Date.now() }
+    await setDoc(doc(db, BACKUP_COLLECTION, id), stripUndefined(backup))
+}
+
+/**
+ * Returns the saved project, whose id may differ from the one passed in: the id is
+ * also the URL slug, so a retitled project has to follow its title.
+ *
+ * Firestore ids are immutable, so following the title means writing a new doc and
+ * dropping the old one. Both go in a single batch — the project can never end up
+ * duplicated or missing — and the doc being vacated is backed up first, so a bad
+ * write is still recoverable through `restoreProjectBackup`.
+ */
+export async function saveProject(project: Project): Promise<Project> {
+    const id = await uniqueSlug(project.title, project.id)
+    const updated = { ...project, id, updatedAt: Date.now() }
+
+    if (id === project.id) {
+        await setDoc(doc(db, PROJECT_COLLECTION, id), stripUndefined(updated))
+        return updated
+    }
+
+    await backupProject(project.id)
+
+    const batch = writeBatch(db)
+    batch.set(doc(db, PROJECT_COLLECTION, id), stripUndefined(updated))
+    batch.delete(doc(db, PROJECT_COLLECTION, project.id))
+    await batch.commit()
+
+    return updated
+}
+
+/**
+ * Puts a snapshot back at the id it was taken from. Deliberately not wired into the
+ * UI — it's the recovery hatch for a rename that went wrong, callable from the
+ * console. Anything written at that id since is overwritten.
+ */
+export async function restoreProjectBackup(id: string): Promise<Project | null> {
+    const snap = await getDoc(doc(db, BACKUP_COLLECTION, id))
+    if (!snap.exists()) return null
+
+    const { project } = snap.data() as ProjectBackup
+    await setDoc(doc(db, PROJECT_COLLECTION, project.id), stripUndefined(project))
+    return project
 }
 
 /** Creates an empty draft with a slug id derived from the title, avoiding collisions. */
 export async function createProject(title: string): Promise<Project> {
-    const base = makeSlug(title)
-    let id = base
-    for (let n = 2; await getProject(id); n++) {
-        id = `${base}-${n}`
-    }
-
+    const id = await uniqueSlug(title)
     const now = Date.now()
     const project: Project = {
         id,
@@ -107,15 +172,19 @@ export async function uploadProjectImage(file: File, projectId: string): Promise
 }
 
 /** The cover is shown both as a hero and as a card thumbnail, so it needs both sizes. */
-export async function uploadProjectCover(file: File, projectId: string): Promise<ProjectCover> {
-    const { full, thumb } = await resizeForGallery(file)
+export async function uploadProjectCover(file: File, projectId: string, crop?: CropRect): Promise<ProjectCover> {
+    const { full, thumb } = await resizeForGallery(file, crop)
     const stem = `projects/${projectId}/cover-${Date.now()}-${baseName(file)}`
 
     const [url, thumbUrl] = await Promise.all([
         upload(stem, full, file),
         upload(`${stem}-thumb`, thumb, file),
     ])
-    return { url, thumb: thumbUrl }
+    return {
+        url,
+        thumb: thumbUrl,
+        aspect: crop ? Math.round((crop.width / crop.height) * 1000) / 1000 : undefined,
+    }
 }
 
 /** Removes both renders, or the thumbnail is orphaned in Storage forever. */

@@ -11,7 +11,12 @@ export type ProjectBlockType = ProjectBlock['type']
 export interface ProjectCover {
   url: string
   thumb?: string
+  /** Width ÷ height of the crop, so the hero renders exactly what was framed. */
+  aspect?: number
 }
+
+/** Covers stored before cropping existed fall back to the old fixed-height hero. */
+export const DEFAULT_COVER_HEIGHT = 420
 
 /** Covers stored before thumbnails existed only carry `url`. */
 export function coverThumb(cover: ProjectCover): string {
