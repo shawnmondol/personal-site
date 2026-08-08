@@ -176,9 +176,8 @@ export function ProjectDetailPage() {
                             href={project.link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="btn btn-primary mt-[18px] inline-flex"
                         >
-                            View project ↗
+                            <span className="btn btn-primary mt-[18px] inline-flex">View project ↗</span>
                         </a>
                     )}
                 </section>
